@@ -116,6 +116,13 @@ float psrnoise(vec2 pos, vec2 per, float rot) {
 
 //////////////////////////////// End noise code ////////////////////////////////
 
+
+varying vec2 v_Uv;
+varying vec4 v_Pos;
+
+uniform float u_Time;
+uniform gsampler2d u_Gradient;
+
 float applyFrequency(float lacunarity, float exponent){
     return pow(lacunarity, exponent);
 }
@@ -136,95 +143,24 @@ vec4 normalize01xyzw(vec4 value){
     return value * 0.5 + 0.5;
 }
 
-varying vec2 v_Uv;
-varying float v_Scale;
-
-uniform sampler2D uCoarseNoise;
-uniform sampler2D uMediumNoise;
-uniform sampler2D uFineNoise;
-
-uniform sampler2D uGradient;
-
-uniform float uTime;
-
-varying float vCoarseTimeMult;
-varying float vMediumTimeMult;
-varying float vFineTimeMult;
-
 void main() {
-
-  float frequency = 1.0;
+    vec2 uv = v_Uv;
+    
+    float frequency = 1.0;
     float timeMult = 0.3;
-    float time = uTime * timeMult;
+    float time = u_Time * timeMult;
 
     float lacunarity = 2.0;
     float persistence = 0.5;
-    // float scale = 4.0;
+    float scale = 4.0;
     float offset = 1.337;
-
-  // float psrnoise(vec2 pos, vec2 per, float rot)
     
-    // // Look up the texel position vertically in the gradient according to the noise; needs to yield a vec 2, to pass through to a texture2D
-    // // This one is a brain twister.
+    float noise1 = psrnoise(vec2(uv.x * scale * applyFrequency(lacunarity, 0.0), uv.y * scale * applyFrequency(lacunarity, 0.0)), vec2(2.0, 4.0), time) * applyAmplitude(persistence, 0.0);
+    float noise2 = psrnoise(vec2(uv.x * scale * applyFrequency(lacunarity, 1.0), uv.y * scale * applyFrequency(lacunarity, 1.0)), vec2(2.0, 6.0), time) * applyAmplitude(persistence, 1.0);
+    float noise3 = psrnoise(vec2(uv.x * scale * applyFrequency(lacunarity, 2.0), uv.y * scale * applyFrequency(lacunarity, 2.0)), vec2(4.0, 8.0), time) * applyAmplitude(persistence, 2.0);
 
-    // // !!! texture must be set to repeat, with three.js, if we want to scroll it !!! //
-    
-    // // 1.- We need a noise value per pixel. We'll use a texture here.
-    // vec4 coarseNoise = texture2D(uCoarseNoise, vec2(v_Uv.x + vCoarseTimeMult, v_Uv.y - vCoarseTimeMult));
-    // float coarseNoise = psrnoise(vec2(v_Uv) * v_Scale, vec2(2.0, 4.0), 0.9);
-    float coarseNoise = psrnoise(vec2(v_Uv.x * v_Scale * applyFrequency(lacunarity, 0.0), v_Uv.y * v_Scale * applyFrequency(lacunarity, 0.0)), vec2(2.0, 4.0), 0.9) * applyAmplitude(persistence, 0.0);;
-    // // vec4 coarseNoise = texture2D(uCoarseNoise, v_Uv); // This is just for not scrolling the noise
-
-    // // 2.- We sample the noise value at this fragment's position. r, g, or b is irrelevant.
-    // float coarseNoiseSample = coarseNoise.r;
-
-    // // 3.- We get a Y coord in the gradient texture according to the noise sample at this fragment's coord    
-    // // X is always 0, we only care about Y: the noise sample between 0 and 1 will give us a coordinate in the Y axis to sample the gradient
-    // vec2 retrievedTexelPos = vec2(0.0, coarseNoiseSample);
-    vec2 retrievedTexelPos = vec2(0.0, coarseNoise);
-
-    // // 4.- We create the final color for this pixel by sampling the gradient in its Y axis according to this the pixel's position. texture2D yields a vec4 ready for use.
-    vec4 coarseColor = texture2D(uGradient, retrievedTexelPos);
-
-    // // Mess around with how much each color weighs
-    coarseColor *= 0.45;
-    // // coarseColor *= mix(0.9, 1.0, cos(uTime) + 1.0 / 2.0);
-    
-    // // Repeat for other two noise maps
-
-    // // vec4 mediumNoise = texture2D(uMediumNoise, v_Uv);
-    // vec4 mediumNoise = texture2D(uMediumNoise, vec2(v_Uv.x, v_Uv.y - vMediumTimeMult));
-    // float mediumNoiseSample = mediumNoise.r;
-    // retrievedTexelPos = vec2(0.0, mediumNoiseSample);
-    // vec4 mediumColor = texture2D(uGradient, retrievedTexelPos);
-
-    // // Mess around with how much each color weighs
-    // mediumColor *= 0.55;
-    // // mediumColor *= mix(0.2, 0.4, cos(uTime) + 1.0 / 2.0);
-    
-    // // vec4 fineNoise = texture2D(uFineNoise, v_Uv);
-    // vec4 fineNoise = texture2D(uFineNoise, vec2(v_Uv.x - vFineTimeMult, v_Uv.y));
-    // float fineNoiseSample = fineNoise.r;
-    // retrievedTexelPos = vec2(0.0, fineNoiseSample);
-    // vec4 fineColor = texture2D(uGradient, retrievedTexelPos);
-
-    // // Mess around with how much each color weighs
-    // // fineColor *= 1.0;
-    // // fineColor *= clamp((sin(uTime) * 2.0 - 1.0), 0.5, 1.0);
-    // // fineColor *= clamp(sin(uTime) + 1.0 / 2.0, 0.7, 1.0);
-    // fineColor *= mix(0.5, 0.6, sin(uTime) + 1.0 / 2.0);
-
-    // // The colors have been multiplied down, so now we can do additive blending instead of direct multiplication here!
-    // // Well, after a bit of fiddling, this is more interesting, but the colors lose connection to the displacement
-    // vec4 finalColor = (coarseColor + mediumColor) * (mediumColor + fineColor) * (coarseColor + fineColor);
-    // // vec4 finalColor = (mediumColor) * (mediumColor + fineColor) * (fineColor + coarseColor);
-
-
-    float noise1 = psrnoise(vec2(v_Uv.x * v_Scale * applyFrequency(lacunarity, 0.0), v_Uv.y * v_Scale * applyFrequency(lacunarity, 0.0)), vec2(2.0, 4.0), time) * applyAmplitude(persistence, 0.0);
-    float noise2 = psrnoise(vec2(v_Uv.x * v_Scale * applyFrequency(lacunarity, 1.0), v_Uv.y * v_Scale * applyFrequency(lacunarity, 1.0)), vec2(2.0, 6.0), time) * applyAmplitude(persistence, 1.0);
-    float noise3 = psrnoise(vec2(v_Uv.x * v_Scale * applyFrequency(lacunarity, 2.0), v_Uv.y * v_Scale * applyFrequency(lacunarity, 2.0)), vec2(4.0, 8.0), time) * applyAmplitude(persistence, 2.0);
-
-    float normNoise = normalize01(noise1 + noise2 + noise3);
+    // float normNoise = normalize01(noise1 + noise2 + noise3);
+    float normNoise = normalize01(noise1);
 
     vec3 colorDark = vec3(61.0 / 255.0, 2.0 / 255.0, 2.0 / 255.0);
     vec3 colorBright = vec3(219.0 / 255.0, 128.0 / 255.0, 9.0 / 255.0);
@@ -234,11 +170,6 @@ void main() {
     finalColor = mix(colorDark, colorBright, normNoise);
 
     gl_FragColor = vec4(finalColor, normNoise);
-
-    // gl_FragColor = finalColor;
-    // gl_FragColor = fineColor;
-    // gl_FragColor = mediumColor;
-    // gl_FragColor = coarseColor;
 }
 `
 

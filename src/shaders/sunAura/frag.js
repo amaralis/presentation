@@ -3,7 +3,7 @@ varying vec2 vUv;
 varying vec3 vPos;
 
 uniform sampler2D uTexGradient;
-uniform float uTime;
+uniform float u_Time;
 uniform vec2 uResolution;
 
 uniform sampler2D PermTexture;			// Permutation texture
@@ -35,7 +35,7 @@ float pnoise1D(in float p)
 void main() {
     vec3 pos = vPos;
     vec2 centeredUv = vUv * 2.0 - 1.0;
-    float time = uTime;
+    float time = u_Time;
 
     // float pulseMinMax = mix(3.8, 4.0, sin(time * 0.8) * 0.7 );
     float pulseMinMax = mix(3.0, 3.5, sin(time));

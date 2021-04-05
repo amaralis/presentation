@@ -29,12 +29,9 @@ fineNoise.wrapT = THREE.RepeatWrapping;
 const fireGradient =  new THREE.TextureLoader().load(fireGradientTex);
 
 const uniforms = {
-    uTime: {value: 0.0},
-    uCoarseNoise: {value: coarseNoise},
-    uMediumNoise: {value: mediumNoise},
-    uFineNoise: {value: fineNoise},
-    uGradient: {value: fireGradient},
-    uResolution: {value: window.innerWidth / window.innerHeight}
+    u_Time: {value: 0.0},
+    u_Gradient: {value: fireGradient},
+    u_Resolution: {value: window.innerWidth / window.innerHeight}
 }
 
 // Material //
