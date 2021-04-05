@@ -118,10 +118,10 @@ float psrnoise(vec2 pos, vec2 per, float rot) {
 
 
 varying vec2 v_Uv;
-varying vec4 v_Pos;
+varying float v_Scale;
 
 uniform float u_Time;
-uniform gsampler2d u_Gradient;
+uniform sampler2D u_Gradient;
 
 float applyFrequency(float lacunarity, float exponent){
     return pow(lacunarity, exponent);
@@ -146,30 +146,37 @@ vec4 normalize01xyzw(vec4 value){
 void main() {
     vec2 uv = v_Uv;
     
-    float frequency = 1.0;
-    float timeMult = 0.3;
-    float time = u_Time * timeMult;
+    float timeMultCoarse = 0.1;
+    float timeMultMedium = 0.2;
+    float timeMultFine = 0.5;
 
     float lacunarity = 2.0;
     float persistence = 0.5;
-    float scale = 4.0;
     float offset = 1.337;
     
-    float noise1 = psrnoise(vec2(uv.x * scale * applyFrequency(lacunarity, 0.0), uv.y * scale * applyFrequency(lacunarity, 0.0)), vec2(2.0, 4.0), time) * applyAmplitude(persistence, 0.0);
-    float noise2 = psrnoise(vec2(uv.x * scale * applyFrequency(lacunarity, 1.0), uv.y * scale * applyFrequency(lacunarity, 1.0)), vec2(2.0, 6.0), time) * applyAmplitude(persistence, 1.0);
-    float noise3 = psrnoise(vec2(uv.x * scale * applyFrequency(lacunarity, 2.0), uv.y * scale * applyFrequency(lacunarity, 2.0)), vec2(4.0, 8.0), time) * applyAmplitude(persistence, 2.0);
+    float coarseNoise = psrnoise(vec2(u_Time * timeMultCoarse + uv.x * v_Scale * applyFrequency(lacunarity, 0.0), u_Time * timeMultCoarse + uv.y * v_Scale * applyFrequency(lacunarity, 0.0)), vec2(2.0, 4.0), u_Time * timeMultCoarse) * applyAmplitude(persistence, 0.0);
+    float mediumNoise = psrnoise(vec2(u_Time * timeMultMedium + uv.x * v_Scale * applyFrequency(lacunarity, 1.0), u_Time * timeMultMedium - uv.y * v_Scale * applyFrequency(lacunarity, 1.0)), vec2(2.0, 6.0), u_Time * timeMultMedium) * applyAmplitude(persistence, 1.0);
+    float fineNoise = psrnoise(vec2(u_Time * timeMultFine + uv.x * v_Scale * applyFrequency(lacunarity, 2.0), u_Time * timeMultFine + uv.y * v_Scale * applyFrequency(lacunarity, 2.0)), vec2(4.0, 8.0), u_Time * timeMultFine) * applyAmplitude(persistence, 2.0);
+    // float coarseNoise = psrnoise(vec2(uv.x * v_Scale * applyFrequency(lacunarity, 0.0), uv.y * v_Scale * applyFrequency(lacunarity, 0.0)), vec2(2.0, 4.0), u_Time * timeMultCoarse) * applyAmplitude(persistence, 0.0);
+    // float mediumNoise = psrnoise(vec2(uv.x * v_Scale * applyFrequency(lacunarity, 1.0), uv.y * v_Scale * applyFrequency(lacunarity, 1.0)), vec2(2.0, 6.0), u_Time * timeMultMedium) * applyAmplitude(persistence, 1.0);
+    // float fineNoise = psrnoise(vec2(uv.x * v_Scale * applyFrequency(lacunarity, 2.0), uv.y * v_Scale * applyFrequency(lacunarity, 2.0)), vec2(4.0, 8.0), u_Time * timeMultFine) * applyAmplitude(persistence, 2.0);
 
-    // float normNoise = normalize01(noise1 + noise2 + noise3);
-    float normNoise = normalize01(noise1);
+    // float normNoise = max(0.4, normalize01(coarseNoise + mediumNoise + fineNoise));
+    float normNoise = normalize01(coarseNoise + mediumNoise + fineNoise);
+    // float normNoise = normalize01(coarseNoise);
 
+    
+    vec4 grad = texture(u_Gradient, vec2(0.0, normNoise));
+    vec4 finalColor = vec4(normNoise) * grad;
+    
+    // vec4 finalColor = vec4(normNoise);
+    
     vec3 colorDark = vec3(61.0 / 255.0, 2.0 / 255.0, 2.0 / 255.0);
     vec3 colorBright = vec3(219.0 / 255.0, 128.0 / 255.0, 9.0 / 255.0);
-    
-    vec3 finalColor = vec3(0.0);
+    // finalColor = mix(colorDark, colorBright, normNoise);
 
-    finalColor = mix(colorDark, colorBright, normNoise);
-
-    gl_FragColor = vec4(finalColor, normNoise);
+    gl_FragColor = finalColor;
+    // gl_FragColor = vec4(finalColor, normNoise);
 }
 `
 

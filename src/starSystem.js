@@ -73,7 +73,7 @@ function startSolarSystem(){
     // const glitchPass = new GlitchPass();
     
     composer.addPass(renderPass);
-    composer.addPass(unrealBloomPass);
+    // composer.addPass(unrealBloomPass);
     // composer.addPass(glitchPass);
     
     // Add Object3Ds to scene graph //
