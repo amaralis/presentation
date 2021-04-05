@@ -1,6 +1,7 @@
 const vert = `
 
-varying vec2 vUv;
+varying vec2 v_Uv;
+varying float v_Scale;
 varying float vCoarseTimeMult;
 varying float vMediumTimeMult;
 varying float vFineTimeMult;
@@ -12,9 +13,10 @@ uniform sampler2D uFineNoise;
 
 uniform float uTime;
 
-void main() {
-    
-    vUv = uv;
+void main() {    
+    v_Uv = uv;
+    v_Scale = 1.0;
+
     vec3 coarsePos = position;
     
     vCoarseTimeMult = uTime * 0.05;
@@ -24,8 +26,8 @@ void main() {
     float lacunarity = 2.0; // Will affect how much frequency will increase (exponential) - irrelevant when using texture sampling
     float persistence = 0.1;  // Will affect how much amplitude will decrease (exponential)
 
-    vec4 coarseNoise = texture2D(uCoarseNoise, vec2(vUv.x + vCoarseTimeMult, vUv.y - vCoarseTimeMult));
-    // vec4 coarseNoise = texture2D(uCoarseNoise, vUv); // This is just for not scrolling the noise
+    vec4 coarseNoise = texture2D(uCoarseNoise, vec2(v_Uv.x + vCoarseTimeMult, v_Uv.y - vCoarseTimeMult));
+    // vec4 coarseNoise = texture2D(uCoarseNoise, v_Uv); // This is just for not scrolling the noise
     
     // Change coarsePos along normals according to noise (the webgl program passes the normals to the shader by default)
     // coarsePos = coarsePos + normal; // This would simply make the object seem bigger
@@ -38,8 +40,8 @@ void main() {
     
     // Repeat for other two noise maps
     
-    vec4 mediumNoise = texture2D(uMediumNoise, vec2(vUv.x, vUv.y - vMediumTimeMult));
-    // vec4 mediumNoise = texture2D(uMediumNoise, vUv);
+    vec4 mediumNoise = texture2D(uMediumNoise, vec2(v_Uv.x, v_Uv.y - vMediumTimeMult));
+    // vec4 mediumNoise = texture2D(uMediumNoise, v_Uv);
     vec3 mediumPos = position;
 
     // Weigh how much the position changes for this particular octave
@@ -48,9 +50,9 @@ void main() {
     // Position should be noise + amplitude; we need to correct to do it along the vertex normal
     mediumPos += ((mediumNoise.xyz) * normal.xyz) * mediumAmplitude;
     
-    // vec4 fineNoise = texture2D(uFineNoise, vec2(vUv.x / 2.0 - vFineTimeMult, vUv.y));
-    vec4 fineNoise = texture2D(uFineNoise, vec2(vUv.x - vFineTimeMult, vUv.y));
-    // vec4 fineNoise = texture2D(uFineNoise, vUv);
+    // vec4 fineNoise = texture2D(uFineNoise, vec2(v_Uv.x / 2.0 - vFineTimeMult, v_Uv.y));
+    vec4 fineNoise = texture2D(uFineNoise, vec2(v_Uv.x - vFineTimeMult, v_Uv.y));
+    // vec4 fineNoise = texture2D(uFineNoise, v_Uv);
     vec3 finePos = position;
 
     // Weigh how much the position changes for this particular octave
