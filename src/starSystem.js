@@ -159,8 +159,8 @@ function startSolarSystem(){
     
     function render(time){ // requestAnimationFrame(callback) passes the time since the page loaded to the callback function
         time *= 0.001; // convert time to seconds
-        sun.material.uniforms.uTime.value = time;
-        sunAura.material.uniforms.uTime.value = time;
+        sun.material.uniforms.u_Time.value = time;
+        sunAura.material.uniforms.u_Time.value = time;
     
         // Check if renderer needs to be resized and update camera properties //
     
