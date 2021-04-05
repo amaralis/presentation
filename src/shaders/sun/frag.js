@@ -161,22 +161,32 @@ void main() {
     // float mediumNoise = psrnoise(vec2(uv.x * v_Scale * applyFrequency(lacunarity, 1.0), uv.y * v_Scale * applyFrequency(lacunarity, 1.0)), vec2(2.0, 6.0), u_Time * timeMultMedium) * applyAmplitude(persistence, 1.0);
     // float fineNoise = psrnoise(vec2(uv.x * v_Scale * applyFrequency(lacunarity, 2.0), uv.y * v_Scale * applyFrequency(lacunarity, 2.0)), vec2(4.0, 8.0), u_Time * timeMultFine) * applyAmplitude(persistence, 2.0);
 
-    // float normNoise = max(0.4, normalize01(coarseNoise + mediumNoise + fineNoise));
-    float normNoise = normalize01(coarseNoise + mediumNoise + fineNoise);
-    // float normNoise = normalize01(coarseNoise);
+    // Coarse texture
+    vec2 retrievedTexelPos = vec2(0.0, normalize01(coarseNoise));
+    // vec2 retrievedTexelPos = vec2(0.0, coarseNoise);
+    vec4 coarseColor = texture2D(u_Gradient, retrievedTexelPos);
+    // coarseColor *= 0.4;
+    
+    // Medium texture
+    retrievedTexelPos = vec2(0.0, normalize01(mediumNoise));
+    // retrievedTexelPos = vec2(0.0, mediumNoise);
+    vec4 mediumColor = texture2D(u_Gradient, retrievedTexelPos);
+    // mediumColor *= 0.4;
 
-    
-    vec4 grad = texture(u_Gradient, vec2(0.0, normNoise));
-    vec4 finalColor = vec4(normNoise) * grad;
-    
-    // vec4 finalColor = vec4(normNoise);
-    
-    vec3 colorDark = vec3(61.0 / 255.0, 2.0 / 255.0, 2.0 / 255.0);
-    vec3 colorBright = vec3(219.0 / 255.0, 128.0 / 255.0, 9.0 / 255.0);
-    // finalColor = mix(colorDark, colorBright, normNoise);
+    // Fine texture
+    retrievedTexelPos = vec2(0.0, normalize01(fineNoise));
+    // retrievedTexelPos = vec2(0.0, fineNoise);
+    vec4 fineColor = texture2D(u_Gradient, retrievedTexelPos);
+    // fineColor *= 0.4;
 
+    // Mix textures
+    // vec4 finalColor = (coarseColor + mediumColor) * (coarseColor + fineColor) * (mediumColor + fineColor);
+    vec4 finalColor = coarseColor * mediumColor * fineColor;
+
+    // gl_FragColor = coarseColor;
+    // gl_FragColor = mediumColor;
+    // gl_FragColor = fineColor;
     gl_FragColor = finalColor;
-    // gl_FragColor = vec4(finalColor, normNoise);
 }
 `
 
