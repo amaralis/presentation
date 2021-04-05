@@ -68,7 +68,7 @@ void main() {
     vec4 finalColor = (coarseColor + mediumColor) * (mediumColor + fineColor) * (coarseColor + fineColor);
     // vec4 finalColor = (mediumColor) * (mediumColor + fineColor) * (fineColor + coarseColor);
 
-    gl_FragColor = finalColor;
+    gl_FragColor = vec4(1.0);
     // gl_FragColor = fineColor;
     // gl_FragColor = mediumColor;
     // gl_FragColor = coarseColor;
