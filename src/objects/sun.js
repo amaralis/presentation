@@ -3,7 +3,7 @@ import fireGradientTex from '../img/noise/fireGradient.png';
 import vert from '../shaders/sun/vert';
 import frag from '../shaders/sun/frag';
 
-const sphereGeometry = new THREE.SphereGeometry(3, 32, 64);
+const sphereGeometry = new THREE.SphereGeometry(3, 64, 64);
 
 // Uniforms to pass into the shader
 

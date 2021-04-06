@@ -151,7 +151,7 @@ void main() {
     float timeMultFine = 0.45;
 
     float lacunarity = 2.0;
-    float persistence = 0.5;
+    float persistence = 0.4;
     float offset = 1.337;
     
     float coarseNoise = psrnoise(vec2(u_Time * timeMultCoarse + uv.x * v_Scale * applyFrequency(lacunarity, 0.0), u_Time * timeMultCoarse + uv.y * v_Scale * applyFrequency(lacunarity, 0.0)), vec2(2.0, 4.0), u_Time * timeMultCoarse) * applyAmplitude(persistence, 0.0);
@@ -171,13 +171,13 @@ void main() {
     retrievedTexelPos = vec2(0.0, normalize01(mediumNoise));
     // retrievedTexelPos = vec2(0.0, mediumNoise);
     vec4 mediumColor = texture2D(u_Gradient, retrievedTexelPos);
-    mediumColor *= 0.7;
+    mediumColor *= 0.6;
 
     // Fine texture
     retrievedTexelPos = vec2(0.0, normalize01(fineNoise));
     // retrievedTexelPos = vec2(0.0, fineNoise);
     vec4 fineColor = texture2D(u_Gradient, retrievedTexelPos);
-    fineColor *= 0.6;
+    fineColor *= 0.3;
 
     // Mix textures
     vec4 finalColor = (coarseColor + mediumColor) * (coarseColor + fineColor) * (mediumColor + fineColor) + 0.07;
