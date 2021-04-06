@@ -144,9 +144,9 @@ void main() {
     v_Uv = uv;
     v_Scale = 6.0;
     
-    float timeMultCoarse = 0.1;
-    float timeMultMedium = 0.7;
-    float timeMultFine = 0.9;
+    float timeMultCoarse = 0.05;
+    float timeMultMedium = 0.35;
+    float timeMultFine = 0.45;
 
     float lacunarity = 2.0;
     float persistence = 0.5;
@@ -161,12 +161,8 @@ void main() {
     float fineNoise = psrnoise(vec2(u_Time * timeMultFine - uv.x * v_Scale * applyFrequency(lacunarity, 2.0), u_Time * timeMultFine + uv.y * v_Scale * applyFrequency(lacunarity, 2.0)), vec2(4.0, 8.0), u_Time * timeMultFine) * applyAmplitude(persistence, 2.0);
     fineNoise *= 0.05;
 
-
     // Offset vertex along normal according to noise
     offset += normal * mediumNoise + normal * coarseNoise + normal * fineNoise;
-
-
-
 
     gl_Position = projectionMatrix * modelViewMatrix * vec4( offset, 1.0 );
 

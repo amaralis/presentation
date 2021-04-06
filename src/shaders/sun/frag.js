@@ -146,9 +146,9 @@ vec4 normalize01xyzw(vec4 value){
 void main() {
     vec2 uv = v_Uv;
     
-    float timeMultCoarse = 0.1;
-    float timeMultMedium = 0.7;
-    float timeMultFine = 0.9;
+    float timeMultCoarse = 0.05;
+    float timeMultMedium = 0.35;
+    float timeMultFine = 0.45;
 
     float lacunarity = 2.0;
     float persistence = 0.5;
