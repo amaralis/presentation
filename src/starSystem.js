@@ -184,7 +184,7 @@ function startSolarSystem(){
         moon2GasGiantOrbit.rotation.y += 0.005;
         
         
-        sun.rotation.y += 0.01;
+        sun.rotation.y = 0.01;
         volcanic1.rotation.y += 0.01
         dry1.rotation.y += 0.008;
         primordial1.rotation.y += 0.02
