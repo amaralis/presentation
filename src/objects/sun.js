@@ -2,7 +2,7 @@ import * as THREE from 'three/build/three.module';
 import coarseNoiseTex from '../img/noise/coarseNoise.png';
 import mediumNoiseTex from '../img/noise/mediumNoise2.png';
 import fineNoiseTex from '../img/noise/fineNoise.png';
-import fireGradientTex from '../img/noise/fireGradient.png';
+import fireGradientTex from '../img/noise/fireGradient2.png';
 import vert from '../shaders/sun/vert';
 import frag from '../shaders/sun/frag';
 

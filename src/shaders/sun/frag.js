@@ -146,7 +146,7 @@ vec4 normalize01xyzw(vec4 value){
 void main() {
     vec2 uv = v_Uv;
     
-    float timeMultCoarse = 0.1;
+    float timeMultCoarse = -0.1;
     float timeMultMedium = 0.2;
     float timeMultFine = 0.5;
 
@@ -165,23 +165,23 @@ void main() {
     vec2 retrievedTexelPos = vec2(0.0, normalize01(coarseNoise));
     // vec2 retrievedTexelPos = vec2(0.0, coarseNoise);
     vec4 coarseColor = texture2D(u_Gradient, retrievedTexelPos);
-    // coarseColor *= 0.4;
+    coarseColor *= 1.0;
     
     // Medium texture
     retrievedTexelPos = vec2(0.0, normalize01(mediumNoise));
     // retrievedTexelPos = vec2(0.0, mediumNoise);
     vec4 mediumColor = texture2D(u_Gradient, retrievedTexelPos);
-    // mediumColor *= 0.4;
+    mediumColor *= 0.7;
 
     // Fine texture
     retrievedTexelPos = vec2(0.0, normalize01(fineNoise));
     // retrievedTexelPos = vec2(0.0, fineNoise);
     vec4 fineColor = texture2D(u_Gradient, retrievedTexelPos);
-    // fineColor *= 0.4;
+    fineColor *= 0.6;
 
     // Mix textures
-    // vec4 finalColor = (coarseColor + mediumColor) * (coarseColor + fineColor) * (mediumColor + fineColor);
-    vec4 finalColor = coarseColor * mediumColor * fineColor;
+    vec4 finalColor = (coarseColor + mediumColor) * (coarseColor + fineColor) * (mediumColor + fineColor) + 0.07;
+    // vec4 finalColor = coarseColor * mediumColor * fineColor;
 
     // gl_FragColor = coarseColor;
     // gl_FragColor = mediumColor;
