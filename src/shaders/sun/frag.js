@@ -177,7 +177,7 @@ void main() {
     retrievedTexelPos = vec2(0.0, normalize01(fineNoise));
     // retrievedTexelPos = vec2(0.0, fineNoise);
     vec4 fineColor = texture2D(u_Gradient, retrievedTexelPos);
-    fineColor *= 0.3;
+    fineColor *= 0.255;
 
     // Mix textures
     vec4 finalColor = (coarseColor + mediumColor) * (coarseColor + fineColor) * (mediumColor + fineColor) + 0.07;

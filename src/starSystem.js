@@ -69,7 +69,7 @@ function startSolarSystem(){
     composer.setSize(width, height);
     
     const renderPass = new RenderPass(scene, camera);
-    const unrealBloomPass = new UnrealBloomPass({x: width, y: height}, 2.0, 1.0, 0.3);
+    const unrealBloomPass = new UnrealBloomPass({x: width, y: height}, 2.0, 1.0, 0.29);
     // const glitchPass = new GlitchPass();
     
     composer.addPass(renderPass);
