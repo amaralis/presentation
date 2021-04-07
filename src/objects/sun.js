@@ -24,5 +24,6 @@ const sphereMaterial = new THREE.ShaderMaterial({
 });
 
 const sun = new THREE.Mesh(sphereGeometry, sphereMaterial);
+sun.name = 'sun';
 
 export default sun;

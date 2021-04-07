@@ -59,6 +59,12 @@ function startSolarSystem(){
     camera.position.x = 0;
     camera.position.y = 0;
     camera.position.z = 20;
+
+    // // Camera orbit controls
+    
+    // const controls = new OrbitControls(camera, canvas);
+    // controls.target.set(0,0,0);
+    // controls.update();
     
     // Scene //
     
@@ -129,8 +135,7 @@ function startSolarSystem(){
     posZ,
     negZ,
     ]);
-    scene.background = texture;
-    
+    scene.background = texture;    
     
     // Render scene //
     
@@ -160,19 +165,24 @@ function startSolarSystem(){
     
     volcanicOrbit.rotateY(0.95);
     dryOrbit.rotateY(1.7);
-    primordial1Orbit.rotateY(4.5);
+    // primordial1Orbit.rotateY(4.5);
     savannah1Orbit.rotateY(-0.004);
     gasGiantOrbit.rotateY(5.003);
     moon1GasGiantOrbit.rotateY(0.03);
     moon2GasGiantOrbit.rotateY(0.014);
     moon1GasGiantOrbit.rotateX(0.03);
     moon2GasGiantOrbit.rotateX(0.014);
-    
+
+    // animateCamera(camera);
+    console.log(scene);    
+    console.log(camera);
+    animateCamera(camera);
+
     function render(time){ // requestAnimationFrame(callback) passes the time since the page loaded to the callback function
         time *= 0.001; // convert time to seconds
         sun.material.uniforms.u_Time.value = time;
         sunAura.material.uniforms.u_Time.value = time;
-    
+        
         // Check if renderer needs to be resized and update camera properties //
         
         if(resizeRendererToDisplaySize(renderer)){
@@ -200,19 +210,13 @@ function startSolarSystem(){
         primordial1Atmo.lookAt(camera.getWorldPosition(new THREE.Vector3(camera.position.x, camera.position.y, camera.position.z)));
         savannah1Atmo.lookAt(camera.getWorldPosition(new THREE.Vector3(camera.position.x, camera.position.y, camera.position.z)));
         gasGiant1Atmo.lookAt(camera.getWorldPosition(new THREE.Vector3(camera.position.x, camera.position.y, camera.position.z)));
-    
+
         // Use renderer if not using composer for postprocessing
         // renderer.render(scene, camera);
         
         requestAnimationFrame(render);
         composer.render();
     }
-    
-    // Camera orbit controls
-    
-    const controls = new OrbitControls(camera, canvas);
-    controls.target.set(0,0,0);
-    controls.update();
 
 }
 
