@@ -1,4 +1,5 @@
 import * as THREE from 'three/build/three.module';
+import animateCamera from './animations/cameraAnim';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
 import sun from './objects/sun';
