@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
-import './App.css';
 import startSolarSystem from './starSystem';
+import './style.css';
 
 function App() {
   useEffect(() => {
