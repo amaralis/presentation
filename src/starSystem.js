@@ -63,20 +63,31 @@ function startSolarSystem(){
         camTargetObj: sun,
         camTargetWorldPos: new THREE.Vector3(0,0,0),
         camTargetLocalPos: new THREE.Vector3(0,0,0),
+        camTargetRelativePos: new THREE.Vector3(0,0,0),
+        camRelativePos: new THREE.Vector3(),
         setCamTargetObj: function(object){
             this.camTargetObj = object;
             return camera.userData;
         },
-        updateCamTargetWorldPos: function(){
-            this.camTargetObj.getWorldPosition(this.camTargetWorldPos);
-            return camera.userData;
-        },
-        updateCamTargetLocalPos: function(){
-            this.camTargetWorldPos.worldToLocal(this.camTargetLocalPos);
-            return camera.userData;
+        // updateCamTargetWorldPos: function(){
+        //     this.camTargetObj.getWorldPosition(this.camTargetWorldPos);
+        //     return camera.userData;
+        // },
+        // updateCamTargetLocalPos: function(){
+        //     this.camTargetWorldPos.worldToLocal(this.camTargetLocalPos);
+        //     return camera.userData;
+        // },
+        insertIntoOrbit: function(camera, newOrbit){
+            // Set camRelativePos to be the camera's world position
+            camera.getWorldPosition(this.camRelativePos);
+            // Convert camRelativePos, which is currently the camera's world position, to the local coordinate space of newOrbit
+            newOrbit.worldToLocal(this.camRelativePos);
+            // Set the camera's parent to be newOrbit, so the camera inherits all transforms from it (like rotation)
+            camera.parent = newOrbit;
+            // Set the camera's position (which is now in a new parent's coordinate space) to be the same as it was when it was in the world's coordinate space
+            camera.position.set(this.camRelativePos.x, this.camRelativePos.y, this.camRelativePos.z)
         }
     }
-    console.log(camera);
 
     // // Camera orbit controls
     
@@ -208,7 +219,7 @@ function startSolarSystem(){
             camera.updateProjectionMatrix();
         }  
         
-        volcanicOrbit.rotation.y += 0.0009;
+        volcanicOrbit.rotation.y += 0.002;
         dryOrbit.rotation.y += 0.007;
         // primordial1Orbit.rotation.y += 0.005;
         moon1GasGiantOrbit.rotation.y += 0.03;
