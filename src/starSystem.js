@@ -51,29 +51,31 @@ function startSolarSystem(){
     
     // Camera //
     
-    const fov = 75; // vertical, in degrees
+    const fov = 90; // vertical, in degrees
     const aspect = 2;
     const near= 0.01;
     const far = 5000;
     const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
     camera.position.x = 0;
     camera.position.y = 0;
-    camera.position.z = 20;
+    camera.position.z = 25;
     camera.userData = {
         camTargetObj: sun,
         camTargetWorldPos: new THREE.Vector3(0,0,0),
+        camTargetLocalPos: new THREE.Vector3(0,0,0),
         setCamTargetObj: function(object){
             this.camTargetObj = object;
-            this.updateCamTargetWorldPos();
             return camera.userData;
         },
         updateCamTargetWorldPos: function(){
             this.camTargetObj.getWorldPosition(this.camTargetWorldPos);
             return camera.userData;
+        },
+        updateCamTargetLocalPos: function(){
+            this.camTargetWorldPos.worldToLocal(this.camTargetLocalPos);
+            return camera.userData;
         }
     }
-    console.log(camera);
-    camera.userData.setCamTargetObj(sun);
     console.log(camera);
 
     // // Camera orbit controls
@@ -182,16 +184,15 @@ function startSolarSystem(){
     // volcanicOrbit.rotateY(0.95);
     // dryOrbit.rotateY(1.7);
     // primordial1Orbit.rotateY(4.5);
-    savannah1Orbit.rotateY(-0.004);
+    // savannah1Orbit.rotateY(-0.004);
     // gasGiantOrbit.rotateY(5.003);
-    moon1GasGiantOrbit.rotateY(0.03);
-    moon2GasGiantOrbit.rotateY(0.014);
-    moon1GasGiantOrbit.rotateX(0.03);
-    moon2GasGiantOrbit.rotateX(0.014);
+    // moon1GasGiantOrbit.rotateY(0.03);
+    // moon2GasGiantOrbit.rotateY(0.014);
+    // moon1GasGiantOrbit.rotateX(0.03);
+    // moon2GasGiantOrbit.rotateX(0.014);
 
-    console.log(camera);
     animateCamera(camera);
-    console.log(camera);
+    
 
     function animate(time){ // requestAnimationFrame(callback) passes the time since the page loaded to the callback function
         camera.lookAt(camera.userData.camTargetWorldPos);
@@ -207,12 +208,12 @@ function startSolarSystem(){
             camera.updateProjectionMatrix();
         }  
         
+        volcanicOrbit.rotation.y += 0.0009;
+        dryOrbit.rotation.y += 0.007;
+        // primordial1Orbit.rotation.y += 0.005;
         moon1GasGiantOrbit.rotation.y += 0.03;
         moon2GasGiantOrbit.rotation.y += 0.005;
-        primordial1Orbit.rotation.y += 0.005;
 
-        
-        
         sun.rotation.y = 0.01;
         volcanic1.rotation.y += 0.01
         dry1.rotation.y += 0.008;
