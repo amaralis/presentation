@@ -47,6 +47,10 @@ function startSolarSystem(){
     const renderer = new THREE.WebGLRenderer({canvas});
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+    const helperGeo = new THREE.SphereGeometry(0.5, 3, 3);
+    const helperMat = new THREE.MeshBasicMaterial({color: 0xFFFFFF});
+    const camtarg = new THREE.Mesh(helperGeo, helperMat);
     
     
     // Camera //
@@ -56,28 +60,21 @@ function startSolarSystem(){
     const near= 0.01;
     const far = 5000;
     const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
-    camera.position.x = 0;
-    camera.position.y = 0;
-    camera.position.z = 25;
+    camera.position.x = 10;
+    camera.position.y = 5;
+    camera.position.z = 15;
     camera.userData = {
-        camTargetObj: sun,
-        camTargetWorldPos: new THREE.Vector3(0,0,0),
         camTargetLocalPos: new THREE.Vector3(0,0,0),
+        camTargetObj: new THREE.Object3D(),
+        // camTargetObj: camtarg,
         camTargetRelativePos: new THREE.Vector3(0,0,0),
         camRelativePos: new THREE.Vector3(),
-        setCamTargetObj: function(object){
-            this.camTargetObj = object;
+        camTest: new THREE.Vector3(),
+        setCamTargetPos: function(position){
+            this.camTargetObj.position.set(position.x, position.y, position.z);
             return camera.userData;
         },
-        // updateCamTargetWorldPos: function(){
-        //     this.camTargetObj.getWorldPosition(this.camTargetWorldPos);
-        //     return camera.userData;
-        // },
-        // updateCamTargetLocalPos: function(){
-        //     this.camTargetWorldPos.worldToLocal(this.camTargetLocalPos);
-        //     return camera.userData;
-        // },
-        insertIntoOrbit: function(camera, newOrbit){
+        insertCamIntoOrbit: function(camera, newOrbit){
             // Set camRelativePos to be the camera's world position
             camera.getWorldPosition(this.camRelativePos);
             // Convert camRelativePos, which is currently the camera's world position, to the local coordinate space of newOrbit
@@ -86,8 +83,37 @@ function startSolarSystem(){
             camera.parent = newOrbit;
             // Set the camera's position (which is now in a new parent's coordinate space) to be the same as it was when it was in the world's coordinate space
             camera.position.set(this.camRelativePos.x, this.camRelativePos.y, this.camRelativePos.z)
+        },
+        insertCamTargetIntoOrbit: function(camera, newOrbit){
+            console.log('camTargetObj.position:', this.camTargetObj.position)
+            console.log('camTarget relative pos:', this.camTargetRelativePos)
+            // this.camTargetRelativePos.set(this.camTargetObj.position)
+
+            // Set camTargetRelativePos to be camTargetObj's world position
+            this.camTargetObj.getWorldPosition(this.camTargetRelativePos);
+            console.log('camTargetObj.position:', this.camTargetObj.position)
+            console.log('camTarget relative pos:', this.camTargetRelativePos)
+
+            // Convert camTargetRelativePos, which is currently the camera target's world position, to the local coordinate space of newOrbit
+            newOrbit.worldToLocal(this.camTargetRelativePos);
+            console.log('camTargetObj.position:', this.camTargetObj.position)
+            console.log('camTarget relative pos:', this.camTargetRelativePos)
+
+            // Make camTargetObj a child of newOrbit
+            this.camTargetObj.parent = newOrbit
+
+            // Set camTargetObj's pos to be in newOrbit's coordinate space (relativePos was put there when we called newOrbit.worldToLocal)
+            this.camTargetObj.position.set(this.camTargetRelativePos.x, this.camTargetRelativePos.y, this.camTargetRelativePos.z)
+
+            console.log(this.camTargetObj.position)
+            
         }
     }
+
+    const gridHelper = new THREE.GridHelper(5,5);
+    camera.userData.camTargetObj.add(gridHelper);
+
+    const orbithelper = new THREE.GridHelper(50,5);
 
     // // Camera orbit controls
     
@@ -113,10 +139,13 @@ function startSolarSystem(){
     // composer.addPass(glitchPass);
     
     // Add Object3Ds to scene graph //
+
+    scene.add(camtarg)
     
     scene.add(sun);
     sun.add(sunAura);
     const volcanicOrbit = createOrbit(scene, volcanic1, 15, 0.3);
+    volcanicOrbit.add(orbithelper)
     const dryOrbit = createOrbit(scene, dry1, 45, 0.2);
     const primordial1Orbit = createOrbit(scene, primordial1, 95, -0.15);
     const savannah1Orbit = createOrbit(primordial1, savannah1, 10, 0.35);
@@ -203,10 +232,25 @@ function startSolarSystem(){
     // moon2GasGiantOrbit.rotateX(0.014);
 
     animateCamera(camera);
-    
 
     function animate(time){ // requestAnimationFrame(callback) passes the time since the page loaded to the callback function
-        camera.lookAt(camera.userData.camTargetWorldPos);
+
+
+        const targetPosition = new THREE.Vector3();
+        const targetRotation = new THREE.Quaternion();
+
+        camera.userData.camTargetObj.getWorldPosition(targetPosition);
+        // camera.userData.camTargetObj.getWorldQuaternion(targetRotation);
+
+
+
+
+
+        camera.lookAt(targetPosition);
+
+        // console.log(targWorldPos)
+        // console.log(camera.userData.camTargetObj.position)
+        // console.log(camera.userData.camTargetRelativePos)
         time *= 0.001; // convert time to seconds
         sun.material.uniforms.u_Time.value = time;
         sunAura.material.uniforms.u_Time.value = time;

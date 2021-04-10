@@ -31,31 +31,35 @@ export default function animateCamera(camera){
     gasGiant1.parent.getWorldPosition(gasGiant1OrbitWorldPos);
     gasGiant1.getWorldPosition(gasGiant1WorldPos);
     
-    tl.to(camera.userData.camTargetWorldPos, {x: volcanic1WorldPos.x, y: volcanic1WorldPos.y, z: volcanic1WorldPos.z, duration: 3,
+    tl.to(camera.userData.camTargetObj.position, {x: volcanic1WorldPos.x, y: volcanic1WorldPos.y, z: volcanic1WorldPos.z, duration: 3,
         onStart: function(){
-            // camera.userData.setCamTargetObj(volcanic1).updateCamTargetWorldPos();
-            console.log(camera.userData.camTargetWorldPos);
+            // camera.userData.setCamTargetObj(volcanic1).updateCamTargetObj.position();
+            console.log(camera.userData.camTargetObj.position);
         },
         onUpdate: function(){
         },
-        onComplete: function(){            
-            camera.userData.insertIntoOrbit(camera, volcanic1.parent);
+        onComplete: function(){
+            // console.log(camera.userData.camTargetObj.position)
+            camera.userData.insertCamIntoOrbit(camera, volcanic1.parent);
+            // console.log(camera.userData.camTargetObj.position)
+            camera.userData.insertCamTargetIntoOrbit(camera, volcanic1.parent);
+            // console.log(camera.userData.camTargetObj.position)
         }})
-    .to(camera.userData.camTargetWorldPos, {x: volcanic1.position.x, y: volcanic1.position.y, z: volcanic1.position.z, duration: 3,
+    .to(camera.userData.camTargetObj.position, {x: volcanic1.position.x, y: volcanic1.position.y, z: volcanic1.position.z, delay: 1, duration: 3,
         onStart: function(){
-            console.log(volcanic1.position)
-            console.log(camera.userData.camTargetWorldPos)
+            // console.log(volcanic1.position)
+            // console.log(camera.userData.camTargetObj.position)
         },
         onUpdate: () => {
         },
         onComplete: function(){
-            console.log(camera.userData.camTargetWorldPos)
-            camera.userData.setCamTargetObj(volcanic1);
+            // console.log(camera.userData.camTargetObj.position)
+            // camera.userData.setCamTargetObj(volcanic1);
         }})
-    // .to(camera.userData.camTargetWorldPos, {x: primordial1WorldPos.x, y: primordial1WorldPos.y, z: primordial1WorldPos.z, duration: 3, delay: 1, onUpdate: () => {
-    // }, onComplete: function(){
-    //     camera.userData.setCamTargetObj(primordial1);
-    // }})
+    .to(camera.position, {x: volcanic1WorldPos.x, y: volcanic1WorldPos.y, z: volcanic1WorldPos.z + 1, duration: 3, onUpdate: () => {
+    }, onComplete: function(){
+        // camera.userData.setCamTargetObj(primordial1);
+    }}, '<')
     // .to(camera.userData.camTargetWorldPos, {x: gasGiant1WorldPos.x, y: gasGiant1WorldPos.y, z: gasGiant1WorldPos.z, duration: 3, delay: 1, onUpdate: () => {
     // }, onComplete: function(){
     //     camera.userData.setCamTargetObj(gasGiant1);
