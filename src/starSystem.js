@@ -157,7 +157,7 @@ function startSolarSystem(){
     // moon2GasGiantOrbit.rotateX(0.014);
 
     // animateCamera(camera);
-    camera.userData.orbit(canvas, camera, sun);
+    camera.userData.orbit(canvas, camera, dry1);
 
     function animate(time){ // requestAnimationFrame(callback) passes the time since the page loaded to the callback function
         time *= 0.001; // convert time to seconds

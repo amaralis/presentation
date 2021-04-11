@@ -61,13 +61,13 @@ camera.userData = {
         this.camTargetObj.position.set(this.camTargetRelativePos.x, this.camTargetRelativePos.y, this.camTargetRelativePos.z)
     },
     orbit: function(canvas, camera, body){
-        // this.insertCamIntoOrbit(camera, body.parent);
-        // this.insertCamTargetIntoOrbit(body.parent);
-        // this.setCamTargetPos({x:body.position.x, y:body.position.y, z:body.position.z});
-        // this.setCamPos(camera, {x:body.position.x - 20, y:body.position.y, z:body.position.z});
+        this.insertCamIntoOrbit(camera, body.parent);
+        this.insertCamTargetIntoOrbit(body.parent);
+        this.setCamTargetPos({x:body.position.x, y:body.position.y, z:body.position.z});
+        this.setCamPos(camera, {x:body.position.x - 10, y:body.position.y, z:body.position.z});
         // Camera orbit controls    
         const controls = new OrbitControls(camera, canvas);
-        controls.target.set(body.position.x, body.position.y, body.position.z);
+        controls.target.set(body.position.x - 30, body.position.y, body.position.z);
         controls.update();
     },
     lookAtTarget: function(){

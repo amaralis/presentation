@@ -38,7 +38,7 @@ void main() {
     float time = u_Time;
 
     // float pulseMinMax = mix(2.8, 3.0, sin(time * 0.8) * 0.7 );
-    float pulseMinMax = mix(4.2, 4.5, sin(time));
+    float pulseMinMax = mix(4.7, 4.5, sin(time));
 
     // Multiplication of centeredUv by pulse minmax manipulates pulse amplitude
     // float len = length(centeredUv);

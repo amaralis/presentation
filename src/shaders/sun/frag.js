@@ -119,6 +119,9 @@ float psrnoise(vec2 pos, vec2 per, float rot) {
 
 varying vec2 v_Uv;
 varying float v_Scale;
+varying float v_timeMultCoarse;
+varying float v_timeMultMedium;
+varying float v_timeMultFine;
 
 uniform float u_Time;
 uniform sampler2D u_Gradient;
@@ -146,12 +149,12 @@ vec4 normalize01xyzw(vec4 value){
 void main() {
     vec2 uv = v_Uv;
     
-    float timeMultCoarse = 0.05;
-    float timeMultMedium = 0.35;
-    float timeMultFine = 0.45;
+    float timeMultCoarse = v_timeMultCoarse;
+    float timeMultMedium = v_timeMultMedium;
+    float timeMultFine = v_timeMultFine;
 
     float lacunarity = 2.0;
-    float persistence = 0.4;
+    float persistence = 0.9;
     float offset = 1.337;
     
     float coarseNoise = psrnoise(vec2(u_Time * timeMultCoarse + uv.x * v_Scale * applyFrequency(lacunarity, 0.0), u_Time * timeMultCoarse + uv.y * v_Scale * applyFrequency(lacunarity, 0.0)), vec2(2.0, 4.0), u_Time * timeMultCoarse) * applyAmplitude(persistence, 0.0);
@@ -171,16 +174,16 @@ void main() {
     retrievedTexelPos = vec2(0.0, normalize01(mediumNoise));
     // retrievedTexelPos = vec2(0.0, mediumNoise);
     vec4 mediumColor = texture2D(u_Gradient, retrievedTexelPos);
-    mediumColor *= 0.6;
+    mediumColor *= 1.0;
 
     // Fine texture
     retrievedTexelPos = vec2(0.0, normalize01(fineNoise));
     // retrievedTexelPos = vec2(0.0, fineNoise);
     vec4 fineColor = texture2D(u_Gradient, retrievedTexelPos);
-    fineColor *= 0.255;
+    fineColor *= 0.3;
 
     // Mix textures
-    vec4 finalColor = (coarseColor + mediumColor) * (coarseColor + fineColor) * (mediumColor + fineColor) + 0.07;
+    vec4 finalColor = (coarseColor + mediumColor) * (coarseColor + fineColor) * (mediumColor + fineColor) + 0.05;
     // vec4 finalColor = fineColor;
 
     // gl_FragColor = coarseColor;

@@ -117,6 +117,9 @@ float psrnoise(vec2 pos, vec2 per, float rot) {
 
 varying vec2 v_Uv;
 varying float v_Scale;
+varying float v_timeMultCoarse;
+varying float v_timeMultMedium;
+varying float v_timeMultFine;
 
 uniform float u_Time;
 
@@ -144,11 +147,16 @@ void main() {
     v_Uv = uv;
     v_Scale = 6.0;
     
-    float timeMultCoarse = 0.05;
-    float timeMultMedium = 0.35;
-    float timeMultFine = 0.45;
+    v_timeMultCoarse = 0.05;
+    v_timeMultMedium = 0.15;
+    v_timeMultFine = 0.25;
+    
+    float timeMultCoarse = v_timeMultCoarse;
+    float timeMultMedium = v_timeMultMedium;
+    float timeMultFine = v_timeMultFine;
 
     float lacunarity = 2.0;
+    // Persistence (affects amplitude) can be different in frag and vert shaders. Lacunarity can't, as it affects the blending of the noises.
     float persistence = 0.5;
     vec3 offset = position;
 
