@@ -67,7 +67,7 @@ camera.userData = {
         this.setCamPos(camera, {x:body.position.x - 10, y:body.position.y, z:body.position.z});
         // Camera orbit controls    
         const controls = new OrbitControls(camera, canvas);
-        controls.target.set(body.position.x - 30, body.position.y, body.position.z);
+        controls.target.set(body.position.x, body.position.y, body.position.z);
         controls.update();
     },
     lookAtTarget: function(){
