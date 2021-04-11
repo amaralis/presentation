@@ -4,10 +4,11 @@ import { CameraHelper } from "three";
 import { volcanic1, dry1, gasGiant1, moon1GasGiant, moon2GasGiant, primordial1, savannah1 } from '../objects/planets';
 import sun from '../objects/sun';
 
-export default function animateCamera(camera){
-    const tl = gsap.timeline();
+import focusBody from './focusTL';
 
-    // const cameraLocalPos = new THREE.Vector3();
+export default function animateCamera(camera, shaders){
+    const masterTL = new gsap.timeline();
+    masterTL.add(focusBody(camera, volcanic1, {focusShader: shaders.focusShader}));
     
     // let cameraRelativePos = new THREE.Vector3();
     let sunWorldPos = new THREE.Vector3();
@@ -31,32 +32,34 @@ export default function animateCamera(camera){
     gasGiant1.parent.getWorldPosition(gasGiant1OrbitWorldPos);
     gasGiant1.getWorldPosition(gasGiant1WorldPos);
     
-    tl.to(camera.userData.camTargetObj.position, {x: volcanic1WorldPos.x, y: volcanic1WorldPos.y, z: volcanic1WorldPos.z, delay: 1, duration: 3, ease: "elastic.out(1,1)",
-        onStart: function(){
-            // camera.userData.setCamTargetObj(volcanic1).updateCamTargetObj.position();
-            // console.log(camera.userData.camTargetObj.position);
-        },
-        onUpdate: function(){
-        },
-        onComplete: function(){
-            // console.log(camera.userData.camTargetObj.position)
-            // camera.userData.insertCamIntoOrbit(camera, volcanic1.parent);
+    // const tl = gsap.timeline();
+    // tl.to(camera.userData.camTargetObj.position, {x: volcanic1WorldPos.x, y: volcanic1WorldPos.y, z: volcanic1WorldPos.z, delay: 1, duration: 3, ease: "elastic.out(1,1)",
+    //     onStart: function(){
+    //         // camera.userData.setCamTargetObj(volcanic1).updateCamTargetObj.position();
+    //         // console.log(camera.userData.camTargetObj.position);
+    //     },
+    //     onUpdate: function(){
+    //     },
+    //     onComplete: function(){
+    //         // console.log(camera.userData.camTargetObj.position)
+    //         // camera.userData.insertCamIntoOrbit(camera, volcanic1.parent);
 
-            // console.log(camera.userData.camTargetObj.position)
-            camera.userData.insertCamTargetIntoOrbit(volcanic1.parent);
-            // console.log(camera.userData.camTargetObj.position)
-        }})
-    .to(camera.userData.camTargetObj.position, {x: volcanic1.position.x, y: volcanic1.position.y, z: volcanic1.position.z, ease: "power2.out", duration: 3,
-        onStart: function(){
-            // console.log(volcanic1.position)
-            // console.log(camera.userData.camTargetObj.position)
-            camera.userData.insertCamIntoOrbit(camera, dry1.parent);
-        },
-        onUpdate: () => {
-        },
-        onComplete: function(){
-            camera.userData.removeCamTargetFromOrbit();
-        }})
+    //         // console.log(camera.userData.camTargetObj.position)
+    //         camera.userData.insertCamTargetIntoOrbit(volcanic1.parent);
+    //         // console.log(camera.userData.camTargetObj.position)
+    //     }})
+    // .to(camera.userData.camTargetObj.position, {x: volcanic1.position.x, y: volcanic1.position.y, z: volcanic1.position.z, ease: "power2.out", duration: 3,
+    //     onStart: function(){
+    //         // console.log(volcanic1.position)
+    //         // console.log(camera.userData.camTargetObj.position)
+    //         camera.userData.insertCamIntoOrbit(camera, dry1.parent);
+    //     },
+    //     onUpdate: () => {
+    //     },
+    //     onComplete: function(){
+    //         camera.userData.removeCamTargetFromOrbit();
+    //         camera.userData.removeCamFromOrbit(camera);
+    //     }})
     // .to(camera.userData.camTargetObj.position, {x: dry1.position.x, y: dry1.position.y, z: dry1.position.z, ease: "power2.out", duration: 3,
     //     onStart: function(){
     //         // console.log(dry1.position)

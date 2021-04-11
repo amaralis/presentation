@@ -25,7 +25,9 @@ import negZ from './img/skybox/nz.png';
 
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass';
+import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass';
+import { FocusShader } from 'three/examples/jsm/shaders/FocusShader';
 // import { GlitchPass } from 'three/examples/jsm/postprocessing/GlitchPass';
 
 function startSolarSystem(){
@@ -59,10 +61,15 @@ function startSolarSystem(){
     
     const renderPass = new RenderPass(scene, camera);
     const unrealBloomPass = new UnrealBloomPass({x: width, y: height}, 2.0, 1.0, 0.5);
+    const focusShader = new ShaderPass(FocusShader);
+    focusShader.uniforms['sampleDistance'].value = 0.0;
+    focusShader.uniforms['screenWidth'].value = width;
+    focusShader.uniforms['screenHeight'].value = height;
     // const glitchPass = new GlitchPass();
     
     composer.addPass(renderPass);
     composer.addPass(unrealBloomPass);
+    composer.addPass(focusShader);
     // composer.addPass(glitchPass);
     
     // Add Object3Ds to scene graph //
@@ -156,8 +163,8 @@ function startSolarSystem(){
     // moon1GasGiantOrbit.rotateX(0.03);
     // moon2GasGiantOrbit.rotateX(0.014);
 
-    animateCamera(camera);
-    // camera.userData.orbit(canvas, camera, moon1GasGiant);
+    // animateCamera(camera, {focusShader});
+    camera.userData.orbit(canvas, camera, sun);
 
     function animate(time){ // requestAnimationFrame(callback) passes the time since the page loaded to the callback function
         time *= 0.001; // convert time to seconds

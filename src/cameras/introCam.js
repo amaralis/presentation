@@ -21,16 +21,6 @@ camera.userData = {
     camTargetRelativePos: new THREE.Vector3(0,0,0),
     camRelativePos: new THREE.Vector3(),
     camTest: new THREE.Vector3(),
-    insertCamIntoOrbit: function(camera, newOrbit){
-        // Set camRelativePos to be the camera's world position
-        camera.getWorldPosition(this.camRelativePos);
-        // Convert camRelativePos, which is currently the camera's world position, to the local coordinate space of newOrbit
-        newOrbit.worldToLocal(this.camRelativePos);
-        // Set the camera's parent to be newOrbit, so the camera inherits all transforms from it (like rotation)
-        camera.parent = newOrbit;
-        // Set the camera's position (which is now in a new parent's coordinate space) to be the same as it was when it was in the world's coordinate space
-        camera.position.set(this.camRelativePos.x, this.camRelativePos.y, this.camRelativePos.z)
-    },
     setCamTargetPos: function(position){
         this.camTargetObj.position.set(position.x, position.y, position.z);
     },
@@ -42,23 +32,38 @@ camera.userData = {
         this.camTargetObj.getWorldPosition(this.camTargetRelativePos);
         // console.log('camTargetObj.position:', this.camTargetObj.position)
         // console.log('camTarget relative pos:', this.camTargetRelativePos)
-
+        
         // Convert camTargetRelativePos, which is currently the camera target's world position, to the local coordinate space of newOrbit
         newOrbit.worldToLocal(this.camTargetRelativePos);
         // console.log('camTargetObj.position:', this.camTargetObj.position)
         // console.log('camTarget relative pos:', this.camTargetRelativePos)
-
+        
         // Make camTargetObj a child of newOrbit
         this.camTargetObj.parent = newOrbit
-
+        
         // Set camTargetObj's pos to be in newOrbit's coordinate space (relativePos was put there when we called newOrbit.worldToLocal)
         this.camTargetObj.position.set(this.camTargetRelativePos.x, this.camTargetRelativePos.y, this.camTargetRelativePos.z)
-
+        
     },
     removeCamTargetFromOrbit: function(){
         this.camTargetObj.getWorldPosition(this.camTargetRelativePos);
         this.camTargetObj.parent = null;
         this.camTargetObj.position.set(this.camTargetRelativePos.x, this.camTargetRelativePos.y, this.camTargetRelativePos.z)
+    },
+    insertCamIntoOrbit: function(camera, newOrbit){
+        // Set camRelativePos to be the camera's world position
+        camera.getWorldPosition(this.camRelativePos);
+        // Convert camRelativePos, which is currently the camera's world position, to the local coordinate space of newOrbit
+        newOrbit.worldToLocal(this.camRelativePos);
+        // Set the camera's parent to be newOrbit, so the camera inherits all transforms from it (like rotation)
+        camera.parent = newOrbit;
+        // Set the camera's position (which is now in a new parent's coordinate space) to be the same as it was when it was in the world's coordinate space
+        camera.position.set(this.camRelativePos.x, this.camRelativePos.y, this.camRelativePos.z)
+    },
+    removeCamFromOrbit: function(camera){
+        camera.getWorldPosition(this.camRelativePos);
+        camera.parent = null;
+        camera.position.set(this.camRelativePos.x, this.camRelativePos.y, this.camRelativePos.z)
     },
     orbit: function(canvas, camera, body){
         this.insertCamIntoOrbit(camera, body.parent);
