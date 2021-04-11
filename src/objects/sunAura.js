@@ -10,7 +10,7 @@ const height = window.innerHeight;
 
 const uniforms = {
     uTexGradient: {value: new THREE.TextureLoader().load(auraTex)},
-    uTime: {value: 0.0},
+    u_Time: {value: 0.0},
     uResolution: {value: new THREE.Vector2(width, height)}
 }
 

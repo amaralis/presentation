@@ -19,7 +19,9 @@ const planet1Mat = new THREE.MeshPhongMaterial({
     map: new THREE.TextureLoader().load(volcanicTex),
     normalMap: new THREE.TextureLoader().load(volcanicNormalMap)
 });
-export const volcanic1 = new THREE.Mesh(planet1Geo, planet1Mat);
+const volcanic1 = new THREE.Mesh(planet1Geo, planet1Mat);
+volcanic1.name = 'volcanic1';
+export { volcanic1 };
 
 
 const dry1Geo = new THREE.SphereGeometry(1, 16, 32);
@@ -27,30 +29,40 @@ const dry1Mat = new THREE.MeshPhongMaterial({
     map: new THREE.TextureLoader().load(dryTex),
     normalMap: new THREE.TextureLoader().load(dryNormalMap),
 });
-export const dry1 = new THREE.Mesh(dry1Geo, dry1Mat);
+const dry1 = new THREE.Mesh(dry1Geo, dry1Mat);
+dry1.name = 'dry1';
+export { dry1 };
 
 
 const gasGiant1Geo = new THREE.SphereGeometry(3, 16, 32);
 const gasGiant1Mat = new THREE.MeshPhongMaterial({
     map: new THREE.TextureLoader().load(gasGiantTex)
 });
-export const gasGiant1 = new THREE.Mesh(gasGiant1Geo, gasGiant1Mat);
+const gasGiant1 = new THREE.Mesh(gasGiant1Geo, gasGiant1Mat);
+gasGiant1.name = 'gasGiant1';
+export { gasGiant1 };
 
 
 const moon1GasGiantGeo = new THREE.SphereGeometry(0.3, 16, 32);
 const moon1GasGiantMat = new THREE.MeshPhongMaterial({
     map: new THREE.TextureLoader().load(moon1GasGiantTex),
-    normalMap: new THREE.TextureLoader().load(moon1GasGiantNormalMap)
+    normalMap: new THREE.TextureLoader().load(moon1GasGiantNormalMap),
+    normalScale: new THREE.Vector2(1,-1)
 });
-export const moon1GasGiant = new THREE.Mesh(moon1GasGiantGeo, moon1GasGiantMat);
+const moon1GasGiant = new THREE.Mesh(moon1GasGiantGeo, moon1GasGiantMat);
+moon1GasGiant.name = 'moon1GasGiant';
+export { moon1GasGiant };
 
 
 const moon2GasGiantGeo = new THREE.SphereGeometry(0.3, 16, 32);
 const moon2GasGiantMat = new THREE.MeshPhongMaterial({
     map: new THREE.TextureLoader().load(moon2GasGiantTex),
-    normalMap: new THREE.TextureLoader().load(moon2GasGiantNormalMap)
+    normalMap: new THREE.TextureLoader().load(moon2GasGiantNormalMap),
+    normalScale: new THREE.Vector2(1,-1)
 });
-export const moon2GasGiant = new THREE.Mesh(moon2GasGiantGeo, moon2GasGiantMat);
+const moon2GasGiant = new THREE.Mesh(moon2GasGiantGeo, moon2GasGiantMat);
+moon2GasGiant.name = 'moon2GasGiant';
+export { moon2GasGiant };
 
 
 const primordial1Geo = new THREE.SphereGeometry(1, 16, 32);
@@ -58,7 +70,9 @@ const primordial1Mat = new THREE.MeshPhongMaterial({
     map: new THREE.TextureLoader().load(primordial1Tex),
     normalMap: new THREE.TextureLoader().load(primordial1NormalMap)
 });
-export const primordial1 = new THREE.Mesh(primordial1Geo, primordial1Mat);
+const primordial1 = new THREE.Mesh(primordial1Geo, primordial1Mat);
+primordial1.name = 'primordial1';
+export { primordial1 };
 
 
 const savannah1Geo = new THREE.SphereGeometry(0.2, 16, 32);
@@ -66,7 +80,9 @@ const savannah1Mat = new THREE.MeshPhongMaterial({
     map: new THREE.TextureLoader().load(savannah1Tex),
     normalMap: new THREE.TextureLoader().load(savannah1NormalMap)
 });
-export const savannah1 = new THREE.Mesh(savannah1Geo, savannah1Mat);
+const savannah1 = new THREE.Mesh(savannah1Geo, savannah1Mat);
+savannah1.name = 'savannah1';
+export { savannah1 };
 
 volcanic1.receiveShadow = true;
 volcanic1.castShadow = true;

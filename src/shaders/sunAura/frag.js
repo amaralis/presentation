@@ -4,7 +4,7 @@ varying vec3 vPos;
 
 uniform sampler2D uTexGradient;
 uniform float u_Time;
-uniform vec2 u_Resolution;
+uniform vec2 uResolution;
 
 uniform sampler2D PermTexture;			// Permutation texture
 const float permTexUnit = 1.0/256.0;		// Perm texture texel-size
@@ -37,8 +37,8 @@ void main() {
     vec2 centeredUv = vUv * 2.0 - 1.0;
     float time = u_Time;
 
-    // float pulseMinMax = mix(3.8, 4.0, sin(time * 0.8) * 0.7 );
-    float pulseMinMax = mix(3.0, 3.5, sin(time));
+    // float pulseMinMax = mix(2.8, 3.0, sin(time * 0.8) * 0.7 );
+    float pulseMinMax = mix(4.2, 4.5, sin(time));
 
     // Multiplication of centeredUv by pulse minmax manipulates pulse amplitude
     // float len = length(centeredUv);
