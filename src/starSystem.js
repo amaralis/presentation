@@ -1,5 +1,7 @@
 import * as THREE from 'three/build/three.module';
 import animateCamera from './animations/cameraAnim';
+import camera from './cameras/introCam';
+import { camtarg } from './cameras/introCam';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
 import sun from './objects/sun';
@@ -12,7 +14,6 @@ import sunLight from './lights/sunLight';
 import gasGiantReflectiveLight from './lights/gasGiantReflectiveLight';
 import ambientLight from './lights/ambientLight';
 
-
 import posX from './img/skybox/px.png';
 import negX from './img/skybox/nx.png';
 import posY from './img/skybox/py.png';
@@ -24,7 +25,6 @@ import negZ from './img/skybox/nz.png';
 
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass';
-// import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass';
 // import { GlitchPass } from 'three/examples/jsm/postprocessing/GlitchPass';
 
@@ -47,79 +47,6 @@ function startSolarSystem(){
     const renderer = new THREE.WebGLRenderer({canvas});
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-
-    const helperGeo = new THREE.SphereGeometry(0.5, 3, 3);
-    const helperMat = new THREE.MeshBasicMaterial({color: 0xFFFFFF});
-    const camtarg = new THREE.Mesh(helperGeo, helperMat);
-    
-    
-    // Camera //
-    
-    const fov = 90; // vertical, in degrees
-    const aspect = 2;
-    const near= 0.01;
-    const far = 5000;
-    const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
-    camera.position.x = 10;
-    camera.position.y = 5;
-    camera.position.z = 15;
-    camera.userData = {
-        camTargetLocalPos: new THREE.Vector3(0,0,0),
-        camTargetObj: new THREE.Object3D(),
-        // camTargetObj: camtarg,
-        camTargetRelativePos: new THREE.Vector3(0,0,0),
-        camRelativePos: new THREE.Vector3(),
-        camTest: new THREE.Vector3(),
-        setCamTargetPos: function(position){
-            this.camTargetObj.position.set(position.x, position.y, position.z);
-            return camera.userData;
-        },
-        insertCamIntoOrbit: function(camera, newOrbit){
-            // Set camRelativePos to be the camera's world position
-            camera.getWorldPosition(this.camRelativePos);
-            // Convert camRelativePos, which is currently the camera's world position, to the local coordinate space of newOrbit
-            newOrbit.worldToLocal(this.camRelativePos);
-            // Set the camera's parent to be newOrbit, so the camera inherits all transforms from it (like rotation)
-            camera.parent = newOrbit;
-            // Set the camera's position (which is now in a new parent's coordinate space) to be the same as it was when it was in the world's coordinate space
-            camera.position.set(this.camRelativePos.x, this.camRelativePos.y, this.camRelativePos.z)
-        },
-        insertCamTargetIntoOrbit: function(camera, newOrbit){
-            console.log('camTargetObj.position:', this.camTargetObj.position)
-            console.log('camTarget relative pos:', this.camTargetRelativePos)
-            // this.camTargetRelativePos.set(this.camTargetObj.position)
-
-            // Set camTargetRelativePos to be camTargetObj's world position
-            this.camTargetObj.getWorldPosition(this.camTargetRelativePos);
-            console.log('camTargetObj.position:', this.camTargetObj.position)
-            console.log('camTarget relative pos:', this.camTargetRelativePos)
-
-            // Convert camTargetRelativePos, which is currently the camera target's world position, to the local coordinate space of newOrbit
-            newOrbit.worldToLocal(this.camTargetRelativePos);
-            console.log('camTargetObj.position:', this.camTargetObj.position)
-            console.log('camTarget relative pos:', this.camTargetRelativePos)
-
-            // Make camTargetObj a child of newOrbit
-            this.camTargetObj.parent = newOrbit
-
-            // Set camTargetObj's pos to be in newOrbit's coordinate space (relativePos was put there when we called newOrbit.worldToLocal)
-            this.camTargetObj.position.set(this.camTargetRelativePos.x, this.camTargetRelativePos.y, this.camTargetRelativePos.z)
-
-            console.log(this.camTargetObj.position)
-            
-        }
-    }
-
-    const gridHelper = new THREE.GridHelper(5,5);
-    camera.userData.camTargetObj.add(gridHelper);
-
-    const orbithelper = new THREE.GridHelper(50,5);
-
-    // // Camera orbit controls
-    
-    // const controls = new OrbitControls(camera, canvas);
-    // controls.target.set(0,0,0);
-    // controls.update();
     
     // Scene //
     
@@ -131,7 +58,7 @@ function startSolarSystem(){
     composer.setSize(width, height);
     
     const renderPass = new RenderPass(scene, camera);
-    const unrealBloomPass = new UnrealBloomPass({x: width, y: height}, 2.0, 1.0, 0.29);
+    const unrealBloomPass = new UnrealBloomPass({x: width, y: height}, 2.0, 1.0, 0.5);
     // const glitchPass = new GlitchPass();
     
     composer.addPass(renderPass);
@@ -145,19 +72,18 @@ function startSolarSystem(){
     scene.add(sun);
     sun.add(sunAura);
     const volcanicOrbit = createOrbit(scene, volcanic1, 15, 0.3);
-    volcanicOrbit.add(orbithelper)
     const dryOrbit = createOrbit(scene, dry1, 45, 0.2);
     const primordial1Orbit = createOrbit(scene, primordial1, 95, -0.15);
     const savannah1Orbit = createOrbit(primordial1, savannah1, 10, 0.35);
     const gasGiantOrbit = createOrbit(scene, gasGiant1, 160, 0.2);
-    const moon1GasGiantOrbit = createOrbit(gasGiant1, moon1GasGiant, 12, 0.3);
-    const moon2GasGiantOrbit = createOrbit(gasGiant1, moon2GasGiant, 25, -0.2);
+    const moon1GasGiantOrbit = createOrbit(gasGiant1, moon1GasGiant, 20, 0.3);
+    const moon2GasGiantOrbit = createOrbit(gasGiant1, moon2GasGiant, 35, -0.2);
     
     const volcanic1Atmo = makeAtmo(volcanic1, 'rgb(189, 0, 0)', 0.5);
     const dry1Atmo = makeAtmo(dry1, 'rgb(181, 145, 25)', 0.5);
     const primordial1Atmo = makeAtmo(primordial1, 'rgb(113, 185, 227)', 0.5);
     const savannah1Atmo = makeAtmo(savannah1, 'rgb(113, 185, 227)', 0.45);
-    const gasGiant1Atmo = makeAtmo(gasGiant1, 'rgb(113, 130, 248)', 0.5);
+    const gasGiant1Atmo = makeAtmo(gasGiant1, 'rgb(209, 197, 125)', 0.4);
     
     // Light //
     
@@ -171,16 +97,15 @@ function startSolarSystem(){
     
     
     scene.add(sunLight);
+    sunLight.castShadow = true;
     gasGiantOrbit.add(gasGiantReflectiveLight);
     gasGiantReflectiveLight.position.x = gasGiant1.position.x - 3.0;
     gasGiantReflectiveLight.position.y = 0;
+
     // const shadowHelper = new THREE.CameraHelper(gasGiantReflectiveLight.shadow.camera)
     // scene.add(shadowHelper)
-    
-    sunLight.castShadow = true;
-    
     // const spotLightHelper = new THREE.SpotLightHelper( gasGiantReflectiveLight );
-    // scene.add( spotLightHelper );
+    // scene.add( spotLightHelper );    
     
     // Skybox //
     
@@ -231,27 +156,12 @@ function startSolarSystem(){
     // moon1GasGiantOrbit.rotateX(0.03);
     // moon2GasGiantOrbit.rotateX(0.014);
 
-    animateCamera(camera);
+    // animateCamera(camera);
+    camera.userData.orbit(canvas, camera, sun);
 
     function animate(time){ // requestAnimationFrame(callback) passes the time since the page loaded to the callback function
-
-
-        const targetPosition = new THREE.Vector3();
-        const targetRotation = new THREE.Quaternion();
-
-        camera.userData.camTargetObj.getWorldPosition(targetPosition);
-        // camera.userData.camTargetObj.getWorldQuaternion(targetRotation);
-
-
-
-
-
-        camera.lookAt(targetPosition);
-
-        // console.log(targWorldPos)
-        // console.log(camera.userData.camTargetObj.position)
-        // console.log(camera.userData.camTargetRelativePos)
         time *= 0.001; // convert time to seconds
+        camera.userData.lookAtTarget();
         sun.material.uniforms.u_Time.value = time;
         sunAura.material.uniforms.u_Time.value = time;
 
@@ -263,20 +173,22 @@ function startSolarSystem(){
             camera.updateProjectionMatrix();
         }  
         
-        volcanicOrbit.rotation.y += 0.002;
-        dryOrbit.rotation.y += 0.007;
-        // primordial1Orbit.rotation.y += 0.005;
-        moon1GasGiantOrbit.rotation.y += 0.03;
-        moon2GasGiantOrbit.rotation.y += 0.005;
+        volcanicOrbit.rotation.y += 0.008;
+        dryOrbit.rotation.y += 0.006;
+        primordial1Orbit.rotation.y += 0.004;
+        savannah1Orbit.rotation.y -= 0.003;
+        gasGiantOrbit.rotation.y += 0.001;
+        moon1GasGiantOrbit.rotation.y += 0.002;
+        // moon2GasGiantOrbit.rotation.y += 0.005;
 
         sun.rotation.y = 0.01;
         volcanic1.rotation.y += 0.01
         dry1.rotation.y += 0.008;
-        primordial1.rotation.y += 0.02
+        primordial1.rotation.y += 0.007
         savannah1.rotation.y += 0.01
-        gasGiant1.rotation.y += 0.01;
+        gasGiant1.rotation.y += 0.003;
         moon1GasGiant.rotation.y += 0.01
-        moon2GasGiant.rotation.y += 0.08
+        moon2GasGiant.rotation.y += 0.007
         
         sunAura.lookAt(camera.getWorldPosition(new THREE.Vector3(camera.position.x, camera.position.y, camera.position.z)));
         volcanic1Atmo.lookAt(camera.getWorldPosition(new THREE.Vector3(camera.position.x, camera.position.y, camera.position.z)));

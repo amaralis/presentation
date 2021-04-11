@@ -31,21 +31,22 @@ export default function animateCamera(camera){
     gasGiant1.parent.getWorldPosition(gasGiant1OrbitWorldPos);
     gasGiant1.getWorldPosition(gasGiant1WorldPos);
     
-    tl.to(camera.userData.camTargetObj.position, {x: volcanic1WorldPos.x, y: volcanic1WorldPos.y, z: volcanic1WorldPos.z, duration: 3,
+    tl.to(camera.userData.camTargetObj.position, {x: volcanic1WorldPos.x, y: volcanic1WorldPos.y, z: volcanic1WorldPos.z, delay: 1, duration: 3, ease: "elastic.out(1,1)",
         onStart: function(){
             // camera.userData.setCamTargetObj(volcanic1).updateCamTargetObj.position();
-            console.log(camera.userData.camTargetObj.position);
+            // console.log(camera.userData.camTargetObj.position);
         },
         onUpdate: function(){
         },
         onComplete: function(){
             // console.log(camera.userData.camTargetObj.position)
-            camera.userData.insertCamIntoOrbit(camera, volcanic1.parent);
+            // camera.userData.insertCamIntoOrbit(camera, volcanic1.parent);
+
             // console.log(camera.userData.camTargetObj.position)
-            camera.userData.insertCamTargetIntoOrbit(camera, volcanic1.parent);
+            camera.userData.insertCamTargetIntoOrbit(volcanic1.parent);
             // console.log(camera.userData.camTargetObj.position)
         }})
-    .to(camera.userData.camTargetObj.position, {x: volcanic1.position.x, y: volcanic1.position.y, z: volcanic1.position.z, delay: 1, duration: 3,
+    .to(camera.userData.camTargetObj.position, {x: volcanic1.position.x, y: volcanic1.position.y, z: volcanic1.position.z, ease: "power2.out", duration: 3,
         onStart: function(){
             // console.log(volcanic1.position)
             // console.log(camera.userData.camTargetObj.position)
@@ -53,15 +54,46 @@ export default function animateCamera(camera){
         onUpdate: () => {
         },
         onComplete: function(){
-            // console.log(camera.userData.camTargetObj.position)
-            // camera.userData.setCamTargetObj(volcanic1);
+            camera.userData.insertCamTargetIntoOrbit(dry1.parent);
         }})
-    .to(camera.position, {x: volcanic1WorldPos.x, y: volcanic1WorldPos.y, z: volcanic1WorldPos.z + 1, duration: 3, onUpdate: () => {
-    }, onComplete: function(){
-        // camera.userData.setCamTargetObj(primordial1);
-    }}, '<')
-    // .to(camera.userData.camTargetWorldPos, {x: gasGiant1WorldPos.x, y: gasGiant1WorldPos.y, z: gasGiant1WorldPos.z, duration: 3, delay: 1, onUpdate: () => {
-    // }, onComplete: function(){
-    //     camera.userData.setCamTargetObj(gasGiant1);
-    // }});
+    .to(camera.userData.camTargetObj.position, {x: dry1.position.x, y: dry1.position.y, z: dry1.position.z, ease: "power2.out", duration: 3,
+        onStart: function(){
+            // console.log(dry1.position)
+            // console.log(camera.userData.camTargetObj.position)
+        },
+        onUpdate: () => {
+        },
+        onComplete: function(){
+            camera.userData.insertCamTargetIntoOrbit(primordial1.parent);
+        }})
+    .to(camera.userData.camTargetObj.position, {x: primordial1.position.x, y: primordial1.position.y, z: primordial1.position.z, ease: "power2.out", duration: 3,
+        onStart: function(){
+            // console.log(primordial1.position)
+            // console.log(camera.userData.camTargetObj.position)
+        },
+        onUpdate: () => {
+        },
+        onComplete: function(){
+            camera.userData.insertCamTargetIntoOrbit(gasGiant1.parent);
+        }})
+    .to(camera.userData.camTargetObj.position, {x: gasGiant1.position.x, y: gasGiant1.position.y, z: gasGiant1.position.z, ease: "power2.out", duration: 3,
+        onStart: function(){
+            // console.log(gasGiant1.position)
+            // console.log(camera.userData.camTargetObj.position)
+        },
+        onUpdate: () => {
+        },
+        onComplete: function(){
+            camera.userData.insertCamTargetIntoOrbit(sun.parent);
+        }})
+    .to(camera.userData.camTargetObj.position, {x: sun.position.x, y: sun.position.y, z: sun.position.z, ease: "power2.out", duration: 3,
+        onStart: function(){
+            // console.log(sun.position)
+            // console.log(camera.userData.camTargetObj.position)
+        },
+        onUpdate: () => {
+        },
+        onComplete: function(){
+            camera.userData.removeCamFromOrbit();
+        }})
 }

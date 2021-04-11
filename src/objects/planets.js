@@ -46,7 +46,8 @@ export { gasGiant1 };
 const moon1GasGiantGeo = new THREE.SphereGeometry(0.3, 16, 32);
 const moon1GasGiantMat = new THREE.MeshPhongMaterial({
     map: new THREE.TextureLoader().load(moon1GasGiantTex),
-    normalMap: new THREE.TextureLoader().load(moon1GasGiantNormalMap)
+    normalMap: new THREE.TextureLoader().load(moon1GasGiantNormalMap),
+    normalScale: new THREE.Vector2(1,-1)
 });
 const moon1GasGiant = new THREE.Mesh(moon1GasGiantGeo, moon1GasGiantMat);
 moon1GasGiant.name = 'moon1GasGiant';
@@ -56,7 +57,8 @@ export { moon1GasGiant };
 const moon2GasGiantGeo = new THREE.SphereGeometry(0.3, 16, 32);
 const moon2GasGiantMat = new THREE.MeshPhongMaterial({
     map: new THREE.TextureLoader().load(moon2GasGiantTex),
-    normalMap: new THREE.TextureLoader().load(moon2GasGiantNormalMap)
+    normalMap: new THREE.TextureLoader().load(moon2GasGiantNormalMap),
+    normalScale: new THREE.Vector2(1,-1)
 });
 const moon2GasGiant = new THREE.Mesh(moon2GasGiantGeo, moon2GasGiantMat);
 moon2GasGiant.name = 'moon2GasGiant';
