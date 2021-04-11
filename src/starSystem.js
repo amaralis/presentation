@@ -60,7 +60,7 @@ function startSolarSystem(){
     composer.setSize(width, height);
     
     const renderPass = new RenderPass(scene, camera);
-    const unrealBloomPass = new UnrealBloomPass({x: width, y: height}, 2.0, 1.0, 0.5);
+    const unrealBloomPass = new UnrealBloomPass({x: width, y: height}, 4.0, 0.8, 0.3);
     const focusShader = new ShaderPass(FocusShader);
     focusShader.uniforms['sampleDistance'].value = 0.0;
     focusShader.uniforms['screenWidth'].value = width;
@@ -79,10 +79,10 @@ function startSolarSystem(){
     scene.add(sun);
     sun.add(sunAura);
     const volcanicOrbit = createOrbit(scene, volcanic1, 15, 0.3);
-    const dryOrbit = createOrbit(scene, dry1, 45, 0.2);
-    const primordial1Orbit = createOrbit(scene, primordial1, 95, -0.15);
+    const dryOrbit = createOrbit(scene, dry1, 75, 0.2);
+    const primordial1Orbit = createOrbit(scene, primordial1, 155, -0.15);
     const savannah1Orbit = createOrbit(primordial1, savannah1, 10, 0.35);
-    const gasGiantOrbit = createOrbit(scene, gasGiant1, 160, 0.2);
+    const gasGiantOrbit = createOrbit(scene, gasGiant1, 215, 0.2);
     const moon1GasGiantOrbit = createOrbit(gasGiant1, moon1GasGiant, 20, 0.3);
     const moon2GasGiantOrbit = createOrbit(gasGiant1, moon2GasGiant, 35, -0.2);
     
@@ -96,14 +96,14 @@ function startSolarSystem(){
     
     scene.add(ambientLight);
     
-    //Set up shadow properties for the light
-    sunLight.shadow.mapSize.width = 2048; // default
-    sunLight.shadow.mapSize.height = 2048; // default
-    sunLight.shadow.camera.near = 15; // default
-    sunLight.shadow.camera.far = 200; // default
     
     
     scene.add(sunLight);
+    //Set up shadow properties for the sunLight
+    sunLight.shadow.mapSize.width = 2048; // default
+    sunLight.shadow.mapSize.height = 2048; // default
+    sunLight.shadow.camera.near = 15; // default
+    sunLight.shadow.camera.far = sunLight.distance; // default
     sunLight.castShadow = true;
     gasGiantOrbit.add(gasGiantReflectiveLight);
     gasGiantReflectiveLight.position.x = gasGiant1.position.x - 3.0;

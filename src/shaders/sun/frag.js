@@ -174,7 +174,7 @@ void main() {
     retrievedTexelPos = vec2(0.0, normalize01(mediumNoise));
     // retrievedTexelPos = vec2(0.0, mediumNoise);
     vec4 mediumColor = texture2D(u_Gradient, retrievedTexelPos);
-    mediumColor *= 0.7;
+    mediumColor *= 0.5;
 
     // Fine texture
     retrievedTexelPos = vec2(0.0, normalize01(fineNoise));
