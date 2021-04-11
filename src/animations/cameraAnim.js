@@ -50,50 +50,51 @@ export default function animateCamera(camera){
         onStart: function(){
             // console.log(volcanic1.position)
             // console.log(camera.userData.camTargetObj.position)
+            camera.userData.insertCamIntoOrbit(camera, dry1.parent);
         },
         onUpdate: () => {
         },
         onComplete: function(){
-            camera.userData.insertCamTargetIntoOrbit(dry1.parent);
+            camera.userData.removeCamTargetFromOrbit();
         }})
-    .to(camera.userData.camTargetObj.position, {x: dry1.position.x, y: dry1.position.y, z: dry1.position.z, ease: "power2.out", duration: 3,
-        onStart: function(){
-            // console.log(dry1.position)
-            // console.log(camera.userData.camTargetObj.position)
-        },
-        onUpdate: () => {
-        },
-        onComplete: function(){
-            camera.userData.insertCamTargetIntoOrbit(primordial1.parent);
-        }})
-    .to(camera.userData.camTargetObj.position, {x: primordial1.position.x, y: primordial1.position.y, z: primordial1.position.z, ease: "power2.out", duration: 3,
-        onStart: function(){
-            // console.log(primordial1.position)
-            // console.log(camera.userData.camTargetObj.position)
-        },
-        onUpdate: () => {
-        },
-        onComplete: function(){
-            camera.userData.insertCamTargetIntoOrbit(gasGiant1.parent);
-        }})
-    .to(camera.userData.camTargetObj.position, {x: gasGiant1.position.x, y: gasGiant1.position.y, z: gasGiant1.position.z, ease: "power2.out", duration: 3,
-        onStart: function(){
-            // console.log(gasGiant1.position)
-            // console.log(camera.userData.camTargetObj.position)
-        },
-        onUpdate: () => {
-        },
-        onComplete: function(){
-            camera.userData.insertCamTargetIntoOrbit(sun.parent);
-        }})
-    .to(camera.userData.camTargetObj.position, {x: sun.position.x, y: sun.position.y, z: sun.position.z, ease: "power2.out", duration: 3,
-        onStart: function(){
-            // console.log(sun.position)
-            // console.log(camera.userData.camTargetObj.position)
-        },
-        onUpdate: () => {
-        },
-        onComplete: function(){
-            camera.userData.removeCamFromOrbit();
-        }})
+    // .to(camera.userData.camTargetObj.position, {x: dry1.position.x, y: dry1.position.y, z: dry1.position.z, ease: "power2.out", duration: 3,
+    //     onStart: function(){
+    //         // console.log(dry1.position)
+    //         // console.log(camera.userData.camTargetObj.position)
+    //     },
+    //     onUpdate: () => {
+    //     },
+    //     onComplete: function(){
+    //         camera.userData.insertCamTargetIntoOrbit(primordial1.parent);
+    //     }})
+    // .to(camera.userData.camTargetObj.position, {x: primordial1.position.x, y: primordial1.position.y, z: primordial1.position.z, ease: "power2.out", duration: 3,
+    //     onStart: function(){
+    //         // console.log(primordial1.position)
+    //         // console.log(camera.userData.camTargetObj.position)
+    //     },
+    //     onUpdate: () => {
+    //     },
+    //     onComplete: function(){
+    //         camera.userData.insertCamTargetIntoOrbit(gasGiant1.parent);
+    //     }})
+    // .to(camera.userData.camTargetObj.position, {x: gasGiant1.position.x, y: gasGiant1.position.y, z: gasGiant1.position.z, ease: "power2.out", duration: 3,
+    //     onStart: function(){
+    //         // console.log(gasGiant1.position)
+    //         // console.log(camera.userData.camTargetObj.position)
+    //     },
+    //     onUpdate: () => {
+    //     },
+    //     onComplete: function(){
+    //         camera.userData.insertCamTargetIntoOrbit(sun.parent);
+    //     }})
+    // .to(camera.userData.camTargetObj.position, {x: sun.position.x, y: sun.position.y, z: sun.position.z, ease: "power2.out", duration: 3,
+    //     onStart: function(){
+    //         // console.log(sun.position)
+    //         // console.log(camera.userData.camTargetObj.position)
+    //     },
+    //     onUpdate: () => {
+    //     },
+    //     onComplete: function(){
+    //         camera.userData.removeCamFromOrbit();
+    //     }})
 }

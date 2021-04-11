@@ -11,9 +11,9 @@ const aspect = 2;
 const near= 0.01;
 const far = 5000;
 const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
-camera.position.x = 3;
-camera.position.y = 0;
-camera.position.z = 0;
+camera.position.x = 0;
+camera.position.y = 10;
+camera.position.z = 20;
 camera.userData = {
     camTargetLocalPos: new THREE.Vector3(0,0,0),
     // camTargetObj: new THREE.Object3D(),
@@ -55,7 +55,7 @@ camera.userData = {
         this.camTargetObj.position.set(this.camTargetRelativePos.x, this.camTargetRelativePos.y, this.camTargetRelativePos.z)
 
     },
-    removeCamFromOrbit: function(){
+    removeCamTargetFromOrbit: function(){
         this.camTargetObj.getWorldPosition(this.camTargetRelativePos);
         this.camTargetObj.parent = null;
         this.camTargetObj.position.set(this.camTargetRelativePos.x, this.camTargetRelativePos.y, this.camTargetRelativePos.z)
