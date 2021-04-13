@@ -28,6 +28,7 @@ const dry1Geo = new THREE.SphereGeometry(1, 16, 32);
 const dry1Mat = new THREE.MeshPhongMaterial({
     map: new THREE.TextureLoader().load(dryTex),
     normalMap: new THREE.TextureLoader().load(dryNormalMap),
+    shininess: 0
 });
 const dry1 = new THREE.Mesh(dry1Geo, dry1Mat);
 dry1.name = 'dry1';
@@ -35,7 +36,7 @@ export { dry1 };
 
 
 const gasGiant1Geo = new THREE.SphereGeometry(3, 16, 32);
-const gasGiant1Mat = new THREE.MeshPhongMaterial({
+const gasGiant1Mat = new THREE.MeshLambertMaterial({
     map: new THREE.TextureLoader().load(gasGiantTex)
 });
 const gasGiant1 = new THREE.Mesh(gasGiant1Geo, gasGiant1Mat);
@@ -51,6 +52,7 @@ const moon1GasGiantMat = new THREE.MeshPhongMaterial({
 });
 const moon1GasGiant = new THREE.Mesh(moon1GasGiantGeo, moon1GasGiantMat);
 moon1GasGiant.name = 'moon1GasGiant';
+moon1GasGiant.userData.isMoon = true;
 export { moon1GasGiant };
 
 
@@ -62,6 +64,7 @@ const moon2GasGiantMat = new THREE.MeshPhongMaterial({
 });
 const moon2GasGiant = new THREE.Mesh(moon2GasGiantGeo, moon2GasGiantMat);
 moon2GasGiant.name = 'moon2GasGiant';
+moon2GasGiant.userData.isMoon = true;
 export { moon2GasGiant };
 
 
@@ -82,6 +85,7 @@ const savannah1Mat = new THREE.MeshPhongMaterial({
 });
 const savannah1 = new THREE.Mesh(savannah1Geo, savannah1Mat);
 savannah1.name = 'savannah1';
+savannah1.userData.isMoon = true;
 export { savannah1 };
 
 volcanic1.receiveShadow = true;
@@ -99,10 +103,11 @@ primordial1.castShadow = true;
 savannah1.receiveShadow = true;
 savannah1.castShadow = true;
 
+// Moons are only visible if parent is visible
 volcanic1.visible = false;
 dry1.visible = false;
 gasGiant1.visible = false;
-moon1GasGiant.visible = false;
-moon2GasGiant.visible = false;
+moon1GasGiant.visible = true;
+moon2GasGiant.visible = true;
 primordial1.visible = false;
-savannah1.visible = false;
+savannah1.visible = true;

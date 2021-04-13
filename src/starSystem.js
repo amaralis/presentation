@@ -161,10 +161,15 @@ function startSolarSystem(){
     // moon1GasGiantOrbit.rotateX(0.03);
     // moon2GasGiantOrbit.rotateX(0.014);
 
-    const targetFx = createTargetHud(sun);
+    // const targetFx = createTargetHud(dry1);
+    // targetFx.ring1.visible = false;
+    // targetFx.ring2.visible = false;
+    // targetFx.ring3.visible = false;
 
-    animateCamera(camera, {focusShader}, targetFx);
-    // camera.userData.orbit(canvas, camera, sun);
+    animateCamera(camera, {focusShader}, scene, renderer);
+    // animateCamera(camera, {focusShader}, targetFx);
+    // camera.userData.orbit(canvas, camera, moon1GasGiant);
+
 
     function animate(time){ // requestAnimationFrame(callback) passes the time since the page loaded to the callback function
         time *= 0.001; // convert time to seconds
@@ -204,10 +209,23 @@ function startSolarSystem(){
         savannah1Atmo.lookAt(camera.getWorldPosition(new THREE.Vector3(camera.position.x, camera.position.y, camera.position.z)));
         gasGiant1Atmo.lookAt(camera.getWorldPosition(new THREE.Vector3(camera.position.x, camera.position.y, camera.position.z)));
 
-        targetFx.ring1.rotation.z += 0.007;
-        targetFx.ring2.rotation.x += 0.013;
-        targetFx.ring3.rotation.x += 0.01;
-        targetFx.ring3.rotation.z += 0.008;
+        // Spin target rings (created and disposed of by gsap)
+        scene.traverseVisible(child => {
+            if(child.name === 'holoRing1'){
+                child.rotation.z += 0.007;
+            }
+            if(child.name === 'holoRing2'){
+                child.rotation.z += 0.013;
+            }
+            if(child.name === 'holoRing3'){
+                child.rotation.x -= 0.01;
+                child.rotation.z += 0.008;
+            }
+        })
+        // targetFx.ring1.rotation.z += 0.007;
+        // targetFx.ring2.rotation.x += 0.013;
+        // targetFx.ring3.rotation.x -= 0.01;
+        // targetFx.ring3.rotation.z += 0.008;
 
         // Use renderer if not using composer for postprocessing
         // renderer.render(scene, camera);

@@ -6,9 +6,14 @@ import sun from '../objects/sun';
 
 import focusBody from './focusTL';
 
-export default function animateCamera(camera, shaders, targetFx){
-    const masterTL = new gsap.timeline();
-    masterTL.add(focusBody(camera, volcanic1, {focusShader: shaders.focusShader}, targetFx));
+export default function animateCamera(camera, shaders, scene, renderer){
+    // const masterTL = gsap.timeline({paused: true});
+    // masterTL.add(focusBody(camera, dry1, {focusShader: shaders.focusShader}, scene));
+    // masterTL.play();
+
+    focusBody(camera, dry1, {focusShader: shaders.focusShader}, scene, renderer)
+    // .eventCallback('onComplete', focusBody, [camera, primordial1, {focusShader: shaders.focusShader}, scene])
+
     
     // let cameraRelativePos = new THREE.Vector3();
     let sunWorldPos = new THREE.Vector3();

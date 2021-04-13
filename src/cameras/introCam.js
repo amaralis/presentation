@@ -8,12 +8,12 @@ export const camtarg = new THREE.Mesh(helperGeo, helperMat);
 
 const fov = 90; // vertical, in degrees
 const aspect = 2;
-const near= 0.01;
+const near= 5;
 const far = 5000;
 const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
 camera.position.x = 0;
-camera.position.y = 0;
-camera.position.z = 20;
+camera.position.y = 50;
+camera.position.z = 200;
 camera.userData = {
     camTargetLocalPos: new THREE.Vector3(0,0,0),
     camTargetObj: new THREE.Object3D(),
