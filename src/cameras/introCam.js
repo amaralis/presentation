@@ -16,8 +16,8 @@ camera.position.y = 50;
 camera.position.z = 200;
 camera.userData = {
     camTargetLocalPos: new THREE.Vector3(0,0,0),
-    camTargetObj: new THREE.Object3D(),
-    // camTargetObj: camtarg,
+    // camTargetObj: new THREE.Object3D(),
+    camTargetObj: camtarg,
     camTargetRelativePos: new THREE.Vector3(0,0,0),
     camRelativePos: new THREE.Vector3(),
     camTest: new THREE.Vector3(),

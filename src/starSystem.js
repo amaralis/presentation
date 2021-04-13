@@ -166,7 +166,7 @@ function startSolarSystem(){
     // targetFx.ring2.visible = false;
     // targetFx.ring3.visible = false;
 
-    animateCamera(camera, {focusShader}, scene, renderer);
+    animateCamera(camera, {focusShader}, scene, renderer, undefined);
     // animateCamera(camera, {focusShader}, targetFx);
     // camera.userData.orbit(canvas, camera, moon1GasGiant);
 
