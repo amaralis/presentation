@@ -21,7 +21,8 @@ function makeAtmo(celestialBody, color, atmoH){
         vertexShader: vert,
         fragmentShader: frag,
         uniforms,
-        transparent: true
+        transparent: true,
+        depthWrite: false
     });
     
     const atmo = new THREE.Mesh(geo, mat);

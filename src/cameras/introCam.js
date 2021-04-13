@@ -12,12 +12,12 @@ const near= 0.01;
 const far = 5000;
 const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
 camera.position.x = 0;
-camera.position.y = 10;
+camera.position.y = 0;
 camera.position.z = 20;
 camera.userData = {
     camTargetLocalPos: new THREE.Vector3(0,0,0),
-    // camTargetObj: new THREE.Object3D(),
-    camTargetObj: camtarg,
+    camTargetObj: new THREE.Object3D(),
+    // camTargetObj: camtarg,
     camTargetRelativePos: new THREE.Vector3(0,0,0),
     camRelativePos: new THREE.Vector3(),
     camTest: new THREE.Vector3(),

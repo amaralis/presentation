@@ -1,6 +1,7 @@
 import * as THREE from 'three/build/three.module';
 import animateCamera from './animations/cameraAnim';
 import camera from './cameras/introCam';
+import createTargetHud from './objects/targetHud';
 import { camtarg } from './cameras/introCam';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
@@ -95,9 +96,6 @@ function startSolarSystem(){
     // Light //
     
     scene.add(ambientLight);
-    
-    
-    
     scene.add(sunLight);
     //Set up shadow properties for the sunLight
     sunLight.shadow.mapSize.width = 2048; // default
@@ -163,8 +161,10 @@ function startSolarSystem(){
     // moon1GasGiantOrbit.rotateX(0.03);
     // moon2GasGiantOrbit.rotateX(0.014);
 
-    // animateCamera(camera, {focusShader});
-    camera.userData.orbit(canvas, camera, sun);
+    const targetFx = createTargetHud(sun);
+
+    animateCamera(camera, {focusShader}, targetFx);
+    // camera.userData.orbit(canvas, camera, sun);
 
     function animate(time){ // requestAnimationFrame(callback) passes the time since the page loaded to the callback function
         time *= 0.001; // convert time to seconds
@@ -203,6 +203,11 @@ function startSolarSystem(){
         primordial1Atmo.lookAt(camera.getWorldPosition(new THREE.Vector3(camera.position.x, camera.position.y, camera.position.z)));
         savannah1Atmo.lookAt(camera.getWorldPosition(new THREE.Vector3(camera.position.x, camera.position.y, camera.position.z)));
         gasGiant1Atmo.lookAt(camera.getWorldPosition(new THREE.Vector3(camera.position.x, camera.position.y, camera.position.z)));
+
+        targetFx.ring1.rotation.z += 0.007;
+        targetFx.ring2.rotation.x += 0.013;
+        targetFx.ring3.rotation.x += 0.01;
+        targetFx.ring3.rotation.z += 0.008;
 
         // Use renderer if not using composer for postprocessing
         // renderer.render(scene, camera);

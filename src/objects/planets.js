@@ -14,7 +14,7 @@ import primordial1NormalMap from '../img/planets/primordial/primordial1NormalMap
 import savannah1Tex from '../img/planets/savannah/savannah1.png';
 import savannah1NormalMap from '../img/planets/savannah/savannah1NormalMap.png';
 
-const planet1Geo = new THREE.SphereGeometry(0.2, 16, 32);
+const planet1Geo = new THREE.SphereGeometry(1, 16, 32);
 const planet1Mat = new THREE.MeshPhongMaterial({
     map: new THREE.TextureLoader().load(volcanicTex),
     normalMap: new THREE.TextureLoader().load(volcanicNormalMap)
@@ -98,3 +98,11 @@ primordial1.receiveShadow = true;
 primordial1.castShadow = true;
 savannah1.receiveShadow = true;
 savannah1.castShadow = true;
+
+volcanic1.visible = false;
+dry1.visible = false;
+gasGiant1.visible = false;
+moon1GasGiant.visible = false;
+moon2GasGiant.visible = false;
+primordial1.visible = false;
+savannah1.visible = false;
