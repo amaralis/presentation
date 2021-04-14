@@ -17,7 +17,8 @@ export default function animateCamera(camera, shaders, scene, renderer, prevBody
     const tl6 = focusBody(camera, moon1GasGiant, {focusShader: shaders.focusShader}, scene, renderer, moon2GasGiant);
     const tl7 = focusBody(camera, moon2GasGiant, {focusShader: shaders.focusShader}, scene, renderer, sun);
 
-    const master = gsap.timeline({repeat: 1});
+    // Not repeatable with repeat property. animateCamera needs to be called again fresh
+    const master = gsap.timeline();
     master.add(tl0)
     .add(tl1)
     .add(tl2)
@@ -25,7 +26,9 @@ export default function animateCamera(camera, shaders, scene, renderer, prevBody
     .add(tl4)
     .add(tl5)
     .add(tl6)
-    .add(tl7);
+    .add(tl7).eventCallback('onComplete', function(){
+        camera.userData.orbit(renderer.domElement, camera, sun)
+    });
 
     return master;
 }

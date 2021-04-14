@@ -16,5 +16,5 @@ export default function createTargetHud(body){
     body.add(ring2)
     body.add(ring3)
 
-    return {ring1, ring2, ring3};
+    return [ring1, ring2, ring3];
 }
