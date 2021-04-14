@@ -1,8 +1,9 @@
 import * as THREE from 'three/build/three.module';
 import { gsap } from "gsap";
 import createTargetHud from '../objects/targetHud';
+import { volcanic1, dry1, gasGiant1, moon1GasGiant, moon2GasGiant, primordial1, savannah1 } from '../objects/planets';
 
-export default function focusBody(camera, body, {focusShader}, scene, renderer, prevBody){
+export default function focusBody(camera, body, {focusShader}, scene, renderer, prevBody, nextBody){
     const { camTargetObj } = camera.userData;
     const tl = gsap.timeline();
 
@@ -13,14 +14,14 @@ export default function focusBody(camera, body, {focusShader}, scene, renderer, 
     //         console.log("Disposed of holo-ring geometry and material");
     //     }
     // })
-
     
-
-    
-    tl.to(camTargetObj.position, {x: body.position.x, y: body.position.y, z: body.position.z, duration: 3, delay: 1, ease: "power2.inOut", onStart: function(){
+    tl.to(camTargetObj.position, {x: body.position.x, y: body.position.y, z: body.position.z, duration: 1, ease: "power2.inOut", onStart: function(){
         camera.userData.insertCamTargetIntoOrbit(body.parent);
+        console.log("cam target pos going to", body.name, camTargetObj.position)
     },
     onComplete: function(){
+        console.log("cam target pos arrived at", body.name, camTargetObj.position)
+
         // Make previous body invisible again and delete the holo rings (targetHud)
         if(prevBody){
             // Delete the rings. We'll have to recreate them for every target because of the radius
@@ -48,10 +49,10 @@ export default function focusBody(camera, body, {focusShader}, scene, renderer, 
             // })
                     
             // Make previous body invisible again
-            prevBody.visible = false;
+            // prevBody.visible = false;
         }
     }})
-    .to(camera, {fov:75, duration: 2, ease: "back.inOut(1)", onUpdate: function(){
+    .to(camera, {fov:75, duration: 1, ease: "back.inOut(1)", onUpdate: function(){
         camera.updateProjectionMatrix();
         },
         onStart: function(){
@@ -73,7 +74,7 @@ export default function focusBody(camera, body, {focusShader}, scene, renderer, 
     //         createTargetHud(body);
     //     }
     // }, '-=0.7')
-    .to(camera, {fov:50, duration: 2, ease: "back.inOut(1)", delay: 4,
+    .to(camera, {fov:75, duration: 1, ease: "back.inOut(1)", delay: 4,
         onUpdate: function(){
             camera.updateProjectionMatrix();
         },
@@ -86,11 +87,48 @@ export default function focusBody(camera, body, {focusShader}, scene, renderer, 
             // }
         },
         onComplete: function(){
-            
+            // camera.userData.removeCamTargetFromOrbit();
+            // console.log("position at animation complete:", camera.userData.camTargetObj.position);
+            // console.log("relative position at animation complete:", camera.userData.camTargetRelativePos);
 
+            // camera.userData.insertCamTargetIntoOrbit(primordial1.parent);
+            // gsap.to(camTargetObj.position, {x: primordial1.position.x, y: primordial1.position.y, z: primordial1.position.z, duration: 2, delay: 2, 
+            //     onComplete: function(){
+            //         // camera.userData.removeCamTargetFromOrbit();
+
+            //         camera.userData.insertCamTargetIntoOrbit(volcanic1.parent);
+            //         gsap.to(camTargetObj.position, {x: volcanic1.position.x, y: volcanic1.position.y, z: volcanic1.position.z, duration: 2, delay: 6})
+            //     }
+            // })
+
+            // if(nextBody){
+            //     focusBody(camera, nextBody, {focusShader}, scene, renderer, prevBody)
+            // }
+            
+            camera.userData.insertCamTargetIntoOrbit(nextBody.parent);
+            // camera.userData.insertCamIntoOrbit(camera, dry1.parent);
         }
     })
-    
+    // .to(camTargetObj.position, {x: dry1.position.x, y: dry1.position.y, z: dry1.position.z, duration: 4, ease: "power2.inOut",
+    //     onStart: function(){
+    //         console.log("cam target pos going to dry1:", camTargetObj.position)
+    //         console.log("dry1 pos:", dry1.position)
+    //     },
+    //     onComplete: function(){
+    //         camera.userData.insertCamTargetIntoOrbit(primordial1.parent);
+
+    //     }
+    // })
+    // .to(camTargetObj.position, {x: primordial1.position.x, y: primordial1.position.y, z: primordial1.position.z, duration: 4, ease: "power2.inOut",
+    //     onStart: function(){
+    //         console.log("cam target pos going to primordial1:", camTargetObj.position)
+    //         console.log("primordial1 pos:", primordial1.position)
+    //     },
+    //     onComplete: function(){
+    //         camera.userData.insertCamTargetIntoOrbit(gasGiant1.parent);
+
+    //     }
+    // })
 
     return tl;
 }

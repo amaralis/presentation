@@ -1,7 +1,7 @@
 import * as THREE from 'three/build/three.module';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
-const helperGeo = new THREE.SphereGeometry(0.1, 3, 3);
+const helperGeo = new THREE.SphereGeometry(0.9, 3, 3);
 const helperMat = new THREE.MeshBasicMaterial({color: 0xFFFFFF});
 export const camtarg = new THREE.Mesh(helperGeo, helperMat);
     
@@ -13,7 +13,7 @@ const far = 5000;
 const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
 camera.position.x = 0;
 camera.position.y = 50;
-camera.position.z = 200;
+camera.position.z = 50;
 camera.userData = {
     camTargetLocalPos: new THREE.Vector3(0,0,0),
     // camTargetObj: new THREE.Object3D(),
@@ -39,10 +39,14 @@ camera.userData = {
         // console.log('camTarget relative pos:', this.camTargetRelativePos)
         
         // Make camTargetObj a child of newOrbit
-        this.camTargetObj.parent = newOrbit
+        this.camTargetObj.parent = newOrbit;
+        // console.log('camTargetObj.position:', this.camTargetObj.position)
+        // console.log('camTarget relative pos:', this.camTargetRelativePos)
         
         // Set camTargetObj's pos to be in newOrbit's coordinate space (relativePos was put there when we called newOrbit.worldToLocal)
         this.camTargetObj.position.set(this.camTargetRelativePos.x, this.camTargetRelativePos.y, this.camTargetRelativePos.z)
+        // console.log('camTargetObj.position:', this.camTargetObj.position)
+        // console.log('camTarget relative pos:', this.camTargetRelativePos)
         
     },
     removeCamTargetFromOrbit: function(){

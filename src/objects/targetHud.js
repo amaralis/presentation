@@ -2,9 +2,6 @@ import * as THREE from 'three/build/three.module';
 
 
 export default function createTargetHud(body){
-    // const geometry1 = new THREE.CylinderGeometry( 1, 1, 0.3, 30, 1, true );
-    // const geometry2 = new THREE.CylinderGeometry( 1, 1, 0.3, 30, 1, true );
-    // const geometry3 = new THREE.CylinderGeometry( 1, 1, 0.3, 30, 1, true );
     const geometry1 = new THREE.CylinderGeometry( body.geometry.parameters.radius * 1.5, body.geometry.parameters.radius * 1.5, 0.3, 30, 1, true );
     const geometry2 = new THREE.CylinderGeometry( body.geometry.parameters.radius * 1.5, body.geometry.parameters.radius * 1.5, 0.3, 30, 1, true );
     const geometry3 = new THREE.CylinderGeometry( body.geometry.parameters.radius * 1.5, body.geometry.parameters.radius * 1.5, 0.3, 30, 1, true );

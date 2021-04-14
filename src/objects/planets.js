@@ -104,10 +104,10 @@ savannah1.receiveShadow = true;
 savannah1.castShadow = true;
 
 // Moons are only visible if parent is visible
-volcanic1.visible = false;
-dry1.visible = false;
-gasGiant1.visible = false;
-moon1GasGiant.visible = true;
-moon2GasGiant.visible = true;
-primordial1.visible = false;
-savannah1.visible = true;
+// volcanic1.visible = false;
+// dry1.visible = false;
+// gasGiant1.visible = false;
+// moon1GasGiant.visible = true;
+// moon2GasGiant.visible = true;
+// primordial1.visible = false;
+// savannah1.visible = true;
