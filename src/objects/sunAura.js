@@ -19,7 +19,8 @@ const mat = new THREE.ShaderMaterial({
     vertexShader: vert,
     fragmentShader: frag,
     uniforms,
-    transparent: true
+    transparent: true,
+    depthWrite: false
 });
 
 const sunAura = new THREE.Mesh(geo, mat);

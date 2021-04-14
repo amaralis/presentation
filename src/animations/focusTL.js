@@ -3,7 +3,7 @@ import { gsap } from "gsap";
 import createTargetHud from '../objects/targetHud';
 import { volcanic1, dry1, gasGiant1, moon1GasGiant, moon2GasGiant, primordial1, savannah1 } from '../objects/planets';
 
-export default function focusBody(camera, body, {focusShader}, scene, renderer, prevBody, nextBody){
+export default function focusBody(camera, body, {focusShader}, scene, renderer, nextBody){
     const { camTargetObj } = camera.userData;
     const tl = gsap.timeline();
 
@@ -17,13 +17,13 @@ export default function focusBody(camera, body, {focusShader}, scene, renderer, 
     
     tl.to(camTargetObj.position, {x: body.position.x, y: body.position.y, z: body.position.z, duration: 1, ease: "power2.inOut", onStart: function(){
         camera.userData.insertCamTargetIntoOrbit(body.parent);
-        console.log("cam target pos going to", body.name, camTargetObj.position)
+        // console.log("cam target pos going to", body.name, camTargetObj.position)
     },
     onComplete: function(){
-        console.log("cam target pos arrived at", body.name, camTargetObj.position)
+        // console.log("cam target pos arrived at", body.name, camTargetObj.position)
 
         // Make previous body invisible again and delete the holo rings (targetHud)
-        if(prevBody){
+        if(body){
             // Delete the rings. We'll have to recreate them for every target because of the radius
             let ids = [];
             scene.traverseVisible(child => {
@@ -49,10 +49,10 @@ export default function focusBody(camera, body, {focusShader}, scene, renderer, 
             // })
                     
             // Make previous body invisible again
-            // prevBody.visible = false;
+            // body.visible = false;
         }
     }})
-    .to(camera, {fov:75, duration: 1, ease: "back.inOut(1)", onUpdate: function(){
+    .to(camera, {fov:10, duration: 1, ease: "back.inOut(1)", onUpdate: function(){
         camera.updateProjectionMatrix();
         },
         onStart: function(){
@@ -67,13 +67,13 @@ export default function focusBody(camera, body, {focusShader}, scene, renderer, 
 
         }
     }, '-=1')
-    // .to(focusShader.uniforms['sampleDistance'], {value:20.0, duration: 1, repeat: 1, yoyo: true, onUpdate: function(){
-    //     // camera.updateProjectionMatrix();
-    //     },
-    //     onComplete: function(){
-    //         createTargetHud(body);
-    //     }
-    // }, '-=0.7')
+    .to(focusShader.uniforms['sampleDistance'], {value:20.0, duration: 1, repeat: 1, yoyo: true, onUpdate: function(){
+        // camera.updateProjectionMatrix();
+        },
+        onComplete: function(){
+            createTargetHud(body);
+        }
+    }, '-=0.7')
     .to(camera, {fov:75, duration: 1, ease: "back.inOut(1)", delay: 4,
         onUpdate: function(){
             camera.updateProjectionMatrix();
@@ -102,33 +102,21 @@ export default function focusBody(camera, body, {focusShader}, scene, renderer, 
             // })
 
             // if(nextBody){
-            //     focusBody(camera, nextBody, {focusShader}, scene, renderer, prevBody)
+            //     focusBody(camera, nextBody, {focusShader}, scene, renderer, body)
             // }
             
             camera.userData.insertCamTargetIntoOrbit(nextBody.parent);
+            console.log(nextBody.parent)
             // camera.userData.insertCamIntoOrbit(camera, dry1.parent);
+            
+            scene.traverse(child => {
+                if(child.name === 'holoRing1' || child.name === 'holoRing2' || child.name === 'holoRing3'){
+                    console.log("Holo-rings still in scene:");
+                    console.log(child)
+                }
+            })
         }
     })
-    // .to(camTargetObj.position, {x: dry1.position.x, y: dry1.position.y, z: dry1.position.z, duration: 4, ease: "power2.inOut",
-    //     onStart: function(){
-    //         console.log("cam target pos going to dry1:", camTargetObj.position)
-    //         console.log("dry1 pos:", dry1.position)
-    //     },
-    //     onComplete: function(){
-    //         camera.userData.insertCamTargetIntoOrbit(primordial1.parent);
-
-    //     }
-    // })
-    // .to(camTargetObj.position, {x: primordial1.position.x, y: primordial1.position.y, z: primordial1.position.z, duration: 4, ease: "power2.inOut",
-    //     onStart: function(){
-    //         console.log("cam target pos going to primordial1:", camTargetObj.position)
-    //         console.log("primordial1 pos:", primordial1.position)
-    //     },
-    //     onComplete: function(){
-    //         camera.userData.insertCamTargetIntoOrbit(gasGiant1.parent);
-
-    //     }
-    // })
 
     return tl;
 }

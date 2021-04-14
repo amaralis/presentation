@@ -76,7 +76,6 @@ function startSolarSystem(){
     // Add Object3Ds to scene graph //
 
     scene.add(camtarg)
-    camtarg.position.set(new THREE.Vector3(-10,40,-10))
     
     scene.add(sun);
     sun.add(sunAura);
@@ -85,16 +84,12 @@ function startSolarSystem(){
     const dryOrbit = createOrbit(scene, dry1, 75, 0.2);
     // dryOrbit.add( new THREE.GridHelper( 150, 5 ) );
     const primordial1Orbit = createOrbit(scene, primordial1, 155, -0.15);
-    primordial1Orbit.add( new THREE.GridHelper( 300, 5 ) );
+    // primordial1Orbit.add( new THREE.GridHelper( 300, 5 ) );
     const savannah1Orbit = createOrbit(primordial1, savannah1, 10, 0.35);
-    savannah1Orbit.add( new THREE.GridHelper( 300, 5 ) );
+    // savannah1Orbit.add( new THREE.GridHelper( 300, 5 ) );
     const gasGiantOrbit = createOrbit(scene, gasGiant1, 215, 0.2);
     const moon1GasGiantOrbit = createOrbit(gasGiant1, moon1GasGiant, 20, 0.3);
     const moon2GasGiantOrbit = createOrbit(gasGiant1, moon2GasGiant, 35, -0.2);
-
-    console.log(savannah1)
-
-
     
     const volcanic1Atmo = makeAtmo(volcanic1, 'rgb(189, 0, 0)', 0.5);
     const dry1Atmo = makeAtmo(dry1, 'rgb(181, 145, 25)', 0.5);
@@ -174,8 +169,8 @@ function startSolarSystem(){
     // targetFx.ring1.visible = false;
     // targetFx.ring2.visible = false;
     // targetFx.ring3.visible = false;
-
-    animateCamera(camera, {focusShader}, scene, renderer, undefined);
+    
+    animateCamera(camera, {focusShader}, scene, renderer, sun);
     // animateCamera(camera, {focusShader}, targetFx);
     // camera.userData.orbit(canvas, camera, moon1GasGiant);
 
