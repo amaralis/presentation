@@ -17,7 +17,6 @@ camera.position.z = 50;
 camera.userData = {
     camTargetBody: undefined,
     camTargetOrbitalSystem: [],
-    // camTargetLocalPos: new THREE.Vector3(0,0,0),
     camTargetObj: new THREE.Object3D(),
     // camTargetObj: camtarg,
     camTargetRelativePos: new THREE.Vector3(0,0,0),
@@ -104,13 +103,8 @@ camera.userData = {
     },
     lookAtTarget: function(){
         const targetPosition = new THREE.Vector3();
-        const targetRotation = new THREE.Quaternion();
-
         this.camTargetObj.getWorldPosition(targetPosition);
-        // this.camTargetObj.getWorldQuaternion(targetRotation);
-
         camera.lookAt(targetPosition);
-
     }
 }
 
