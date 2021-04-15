@@ -27,7 +27,21 @@ export default function animateCamera(camera, shaders, scene, renderer, prevBody
     .add(tl5)
     .add(tl6)
     .add(tl7).eventCallback('onComplete', function(){
-        camera.userData.orbit(renderer.domElement, camera, sun)
+        // Make previous body invisible again; If the current body is in the camTargetOrbitalSystem array, leave it visible
+            // if(camera.userData.camTargetBody && camera.userData.camTargetBody.name !== 'sun' && !camera.userData.camTargetOrbitalSystem.includes(body.id)){
+                // We're in a new orbital system - make every object in the existing array invisible and clear the orbital system array
+                camera.userData.camTargetOrbitalSystem.forEach(id => {
+                    // Some ids might be holo-rings that have already been deleted, or some other non-existent junk
+                    const object = scene.getObjectById(id);
+                    if(object){
+                        object.visible = false;
+                    }
+                });
+                // console.log("Clearing orbital system")
+                camera.userData.camTargetOrbitalSystem = [];
+                // console.log("Orbital system after clearing", camera.userData.camTargetOrbitalSystem);
+            // }
+        // camera.userData.orbit(renderer.domElement, camera, sun)
     });
 
     return master;

@@ -171,6 +171,11 @@ function startSolarSystem(){
     // targetFx.ring3.visible = false;
 
     animateCamera(camera, {focusShader}, scene, renderer, sun);
+    
+    setTimeout(() => {
+        animateCamera(camera, {focusShader}, scene, renderer, sun);
+        
+    }, 60000);
 
 
     function animate(time){ // requestAnimationFrame(callback) passes the time since the page loaded to the callback function

@@ -22,6 +22,27 @@ camera.userData = {
     // camTargetObj: camtarg,
     camTargetRelativePos: new THREE.Vector3(0,0,0),
     camRelativePos: new THREE.Vector3(),
+    clearOrbitalSystem: function(scene){
+        this.camTargetOrbitalSystem.forEach(id => {
+            // Some ids might be holo-rings that have already been deleted, or some other non-existent junk - store the gotten object in a variable first
+            const object = scene.getObjectById(id);
+            if(object){
+                object.visible = false;
+            }
+        });
+        // console.log("Clearing orbital system")
+        this.camTargetOrbitalSystem = [];
+        // console.log("Orbital system after clearing", camera.userData.camTargetOrbitalSystem);
+    },
+    pushBodyIntoOrbitalSystem: function(){
+        if(this.camTargetBody && this.camTargetBody.name !== 'sun' && !this.camTargetOrbitalSystem.includes(this.camTargetBody.id)){ // Optional chaining still unsuported by webpack
+            this.camTargetBody.traverse(child => {
+                // console.log("Traversing", this.camTargetBody.name);
+                // console.log("Children of", this.camTargetBody.name, "Found:", child)
+                this.camTargetOrbitalSystem.push(child.id);
+            });
+        }
+    },
     // camTest: new THREE.Vector3(),
     setCamTargetPos: function(position){
         this.camTargetObj.position.set(position.x, position.y, position.z);
