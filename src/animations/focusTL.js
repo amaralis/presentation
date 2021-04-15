@@ -5,7 +5,7 @@ import { volcanic1, dry1, gasGiant1, moon1GasGiant, moon2GasGiant, primordial1, 
 
 export default function focusBody(camera, body, {focusShader}, scene, renderer, nextBody){
     const { camTargetObj } = camera.userData;
-    let { camTargetOrbitalSystem } = camera.userData;
+    // let { camTargetOrbitalSystem } = camera.userData;
     const tl = gsap.timeline();
 
     // scene.traverseVisible(child => {
@@ -19,20 +19,28 @@ export default function focusBody(camera, body, {focusShader}, scene, renderer, 
     
     
     tl.to(camTargetObj.position, {x: body.position.x, y: body.position.y, z: body.position.z, duration: 1, ease: "power2.inOut", onStart: function(){
+        console.log("camTargetOrbitalSystem", camera.userData.camTargetOrbitalSystem);
+
         camera.userData.insertCamTargetIntoOrbit(body.parent);
+
+        console.log("camTargetOrbitalSystem", camera.userData.camTargetOrbitalSystem);
 
         // Push all the children of current camera target body into its orbital system array, so we can find out if other modies are its moons
         // BUT only do it if it's not already in any potentially previously existing orbital system array
-        if(camera.userData.camTargetBody && camera.userData.camTargetBody.name !== 'sun' && !camTargetOrbitalSystem.includes(camera.userData.camTargetBody.id)){ // Optional chaining still unsuported by webpack
+        if(camera.userData.camTargetBody && camera.userData.camTargetBody.name !== 'sun' && !camera.userData.camTargetOrbitalSystem.includes(camera.userData.camTargetBody.id)){ // Optional chaining still unsuported by webpack
             camera.userData.camTargetBody.traverse(child => {
-                camTargetOrbitalSystem.push(child.id);
+                console.log("Traversing", camera.userData.camTargetBody.name);
+                console.log("Children of", camera.userData.camTargetBody.name, "Found:", child)
+                camera.userData.camTargetOrbitalSystem.push(child.id);
             });
         }
         console.log("camTargetBody:", camera.userData.camTargetBody);
         console.log("body:", body);
-        console.log("camTargetOrbitalSystem", camTargetOrbitalSystem);
-
-        console.log("Orbital system includes current body:", camTargetOrbitalSystem.includes(body.id));
+        console.log("camTargetOrbitalSystem", camera.userData.camTargetOrbitalSystem);
+        camera.userData.camTargetOrbitalSystem.forEach(id => {
+            console.log("object in orbital array:", scene.getObjectById(id));
+        })
+        console.log("Orbital system includes current body:", camera.userData.camTargetOrbitalSystem.includes(body.id));
     },
     onComplete: function(){
         // console.log("cam target pos arrived at", body.name, camTargetObj.position)
@@ -101,16 +109,18 @@ export default function focusBody(camera, body, {focusShader}, scene, renderer, 
             // }
 
             // Make previous body invisible again; If the current body is in the camTargetOrbitalSystem array, leave it visible
-            if(camera.userData.camTargetBody && camera.userData.camTargetBody.name !== 'sun' && !camTargetOrbitalSystem.includes(body.id)){
+            if(camera.userData.camTargetBody && camera.userData.camTargetBody.name !== 'sun' && !camera.userData.camTargetOrbitalSystem.includes(body.id)){
                 // We're in a new orbital system - make every object in the existing array invisible and clear the orbital system array
-                camTargetOrbitalSystem.forEach(id => {
+                camera.userData.camTargetOrbitalSystem.forEach(id => {
                     // Some ids might be holo-rings that have already been deleted, or some other non-existent junk
                     const object = scene.getObjectById(id);
                     if(object){
                         object.visible = false;
                     }
                 });
-                camTargetOrbitalSystem = [];
+                console.log("Clearing orbital system")
+                camera.userData.camTargetOrbitalSystem = [];
+                console.log("Orbital system after clearing", camera.userData.camTargetOrbitalSystem);
             }
 
             camera.userData.camTargetBody = body;
@@ -152,8 +162,11 @@ export default function focusBody(camera, body, {focusShader}, scene, renderer, 
             
 
 
+            console.log("camTargetOrbitalSystem", camera.userData.camTargetOrbitalSystem);
             
             camera.userData.insertCamTargetIntoOrbit(nextBody.parent);
+            
+            console.log("camTargetOrbitalSystem", camera.userData.camTargetOrbitalSystem);
             // console.log(nextBody.parent)
             // camera.userData.insertCamIntoOrbit(camera, dry1.parent);
             
