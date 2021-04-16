@@ -1,6 +1,7 @@
 import * as THREE from 'three/build/three.module';
 import { gsap } from "gsap";
 import { CameraHelper } from "three";
+import disposeOfObjects from '../utils/disposeOfObjects';
 import { volcanic1, dry1, gasGiant1, moon1GasGiant, moon2GasGiant, primordial1, savannah1 } from '../objects/planets';
 import sun from '../objects/sun';
 
@@ -19,6 +20,8 @@ export default function animateCamera(camera, shaders, scene, renderer, prevBody
 
     // Not repeatable with repeat property. animateCamera needs to be called again fresh
     const master = gsap.timeline();
+
+
     master.add(tl0)
     .add(tl1)
     .add(tl2)
@@ -27,21 +30,26 @@ export default function animateCamera(camera, shaders, scene, renderer, prevBody
     .add(tl5)
     .add(tl6)
     .add(tl7).eventCallback('onComplete', function(){
-        // Make previous body invisible again; If the current body is in the camTargetOrbitalSystem array, leave it visible
-            // if(camera.userData.camTargetBody && camera.userData.camTargetBody.name !== 'sun' && !camera.userData.camTargetOrbitalSystem.includes(body.id)){
-                // We're in a new orbital system - make every object in the existing array invisible and clear the orbital system array
-                camera.userData.camTargetOrbitalSystem.forEach(id => {
-                    // Some ids might be holo-rings that have already been deleted, or some other non-existent junk
-                    const object = scene.getObjectById(id);
-                    if(object){
-                        object.visible = false;
-                    }
-                });
-                // console.log("Clearing orbital system")
-                camera.userData.camTargetOrbitalSystem = [];
-                // console.log("Orbital system after clearing", camera.userData.camTargetOrbitalSystem);
-            // }
-        // camera.userData.orbit(renderer.domElement, camera, sun)
+        camera.userData.camTargetOrbitalSystem.forEach(id => {
+            // Some ids might be holo-rings that have already been deleted, or some other non-existent junk
+            const object = scene.getObjectById(id);
+            if(object){
+                object.visible = false;
+            }
+
+        });
+        // console.log("Clearing orbital system")
+        camera.userData.camTargetOrbitalSystem = [];
+
+        disposeOfObjects("name", ['holoRing1', 'holoRing2', 'holoRing3'], scene, renderer);
+
+        // Debug for memory leaks
+        scene.traverse(child => {
+            if(child.name === 'holoRing1' || child.name === 'holoRing2' || child.name === 'holoRing3'){
+                console.log("Holo-rings still in scene:");
+                console.log(child)
+            }
+        })
     });
 
     return master;

@@ -78,6 +78,7 @@ function startSolarSystem(){
     scene.add(camtarg)
     
     scene.add(sun);
+    // sun.add( new THREE.GridHelper( 150, 5, 0xFF0000, 0xFF0000 ) );
     sun.add(sunAura);
     const volcanicOrbit = createOrbit(scene, volcanic1, 15, 0.3);
     // volcanicOrbit.add( new THREE.GridHelper( 150, 5, 0xFF0000, 0xFF0000 ) );
@@ -172,10 +173,10 @@ function startSolarSystem(){
 
     animateCamera(camera, {focusShader}, scene, renderer, sun);
     
-    setTimeout(() => {
-        animateCamera(camera, {focusShader}, scene, renderer, sun);
+    // setTimeout(() => {
+    //     animateCamera(camera, {focusShader}, scene, renderer, sun);
         
-    }, 60000);
+    // }, 60000);
 
 
     function animate(time){ // requestAnimationFrame(callback) passes the time since the page loaded to the callback function
@@ -217,22 +218,20 @@ function startSolarSystem(){
         gasGiant1Atmo.lookAt(camera.getWorldPosition(new THREE.Vector3(camera.position.x, camera.position.y, camera.position.z)));
 
         // Spin target rings (created and disposed of by gsap)
-        scene.traverseVisible(child => {
-            if(child.name === 'holoRing1'){
-                child.rotation.z += 0.007;
-            }
-            if(child.name === 'holoRing2'){
-                child.rotation.z += 0.013;
-            }
-            if(child.name === 'holoRing3'){
-                child.rotation.x -= 0.01;
-                child.rotation.z += 0.008;
-            }
-        })
-        // targetFx.ring1.rotation.z += 0.007;
-        // targetFx.ring2.rotation.x += 0.013;
-        // targetFx.ring3.rotation.x -= 0.01;
-        // targetFx.ring3.rotation.z += 0.008;
+        if(camera.userData.camTargetBody){
+            camera.userData.camTargetBody.traverse(child => {
+                if(child.name === 'holoRing1'){
+                    child.rotation.z += 0.007;
+                }
+                if(child.name === 'holoRing2'){
+                    child.rotation.z += 0.013;
+                }
+                if(child.name === 'holoRing3'){
+                    child.rotation.x -= 0.01;
+                    child.rotation.z += 0.008;
+                }
+            });
+        }
 
         // Use renderer if not using composer for postprocessing
         // renderer.render(scene, camera);
