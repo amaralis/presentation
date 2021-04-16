@@ -25,8 +25,6 @@ export default function disposeOfObjects(objPropType, arr, scene, renderer){
         }
 
         renderer.renderLists.dispose();
-        console.log(scene);
-        console.log(children);
         
         return;
 

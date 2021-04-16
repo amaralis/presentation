@@ -41,7 +41,7 @@ export default function animateCamera(camera, shaders, scene, renderer, prevBody
         // console.log("Clearing orbital system")
         camera.userData.camTargetOrbitalSystem = [];
 
-        disposeOfObjects("name", ['holoRing1', 'holoRing2', 'holoRing3', 'sun'], scene, renderer);
+        disposeOfObjects("name", ['holoRing1', 'holoRing2', 'holoRing3'], scene, renderer);
 
         // Debug for memory leaks
         scene.traverse(child => {
