@@ -12,26 +12,47 @@ export default function disposeOfObjects(objPropType, arr, scene, renderer){
         for(let i = children.length - 1; i >= 0; i--){
             children[i].parent.remove(children[i]);
             children[i].geometry.dispose();
+            if(children[i].material.map){
+                children[i].material.map.dispose();
+            }
+            if(children[i].material.normalMap){
+                children[i].material.normalMap.dispose();
+            }
+            if(children[i].material.displacementMap){
+                children[i].material.displacementMap.dispose();
+            }
             children[i].material.dispose();
         }
 
         renderer.renderLists.dispose();
         console.log(scene);
+        console.log(children);
         
         return;
 
     } else if(objPropType === "id"){
         arr.forEach(id => {
             const obj = scene.getObjectById(id);
-            obj.traverse(child=> {
-                children.push(child);
-            });
+            if(obj.type === "Mesh"){
+                obj.traverse(child=> {                    
+                    children.push(child);
+                });
+            }
         });
         
         // Traverse the children array backwards, to delete children first (just for caution)
         for(let i = children.length - 1; i >= 0; i--){
             children[i].parent.remove(children[i]);
             children[i].geometry.dispose();
+            if(children[i].material.map){
+                children[i].material.map.dispose();
+            }
+            if(children[i].material.normalMap){
+                children[i].material.normalMap.dispose();
+            }
+            if(children[i].material.displacementMap){
+                children[i].material.displacementMap.dispose();
+            }
             children[i].material.dispose();
             
         }
@@ -43,6 +64,7 @@ export default function disposeOfObjects(objPropType, arr, scene, renderer){
 
     } else if(objPropType === "all"){
         scene.traverse(child => {
+            if(child.type === "Mesh")
             children.push(child.id);
         });
         
@@ -52,13 +74,23 @@ export default function disposeOfObjects(objPropType, arr, scene, renderer){
             if(obj.parent){
                 obj.parent.remove(obj);
             }
-            if(obj.geometry){
-                obj.geometry.dispose();
+            obj.geometry.dispose();
+            if(obj.material.map){
+                obj.material.map.dispose();
             }
-            if(obj.material){
-                obj.material.dispose();
+            if(obj.material.normalMap){
+                obj.material.normalMap.dispose();
             }
+            if(obj.material.displacementMap){
+                obj.material.displacementMap.dispose();
+            }
+            obj.material.dispose();
         }
+
+        const background = scene.background;
+
+        scene.background = null;
+        background.dispose();
 
         renderer.renderLists.dispose();
         console.log(scene)

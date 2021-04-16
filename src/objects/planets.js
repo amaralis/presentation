@@ -14,11 +14,9 @@ import primordial1NormalMap from '../img/planets/primordial/primordial1NormalMap
 import savannah1Tex from '../img/planets/savannah/savannah1.png';
 import savannah1NormalMap from '../img/planets/savannah/savannah1NormalMap.png';
 
-export const volcanicTexture = new THREE.TextureLoader().load(volcanicTex);
-
 const planet1Geo = new THREE.SphereGeometry(0.3, 16, 32);
 const planet1Mat = new THREE.MeshPhongMaterial({
-    map: volcanicTexture,
+    map: new THREE.TextureLoader().load(volcanicTex),
     normalMap: new THREE.TextureLoader().load(volcanicNormalMap)
 });
 const volcanic1 = new THREE.Mesh(planet1Geo, planet1Mat);
