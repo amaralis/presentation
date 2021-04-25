@@ -67,7 +67,7 @@ export default function focusBody(camera, body, {focusShader}, scene, renderer, 
             camera.userData.camTargetBody = body;
         }
     }, '-=0.7')
-    .to(camera, {fov:90, duration: 1, ease: "back.inOut(1)", delay: 0,
+    .to(camera, {fov:90, duration: 1, ease: "back.inOut(1)", delay: 3,
         onStart: function(){
         },
         onUpdate: function(){

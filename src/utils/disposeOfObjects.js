@@ -91,7 +91,7 @@ export default function disposeOfObjects(objPropType, arr, scene, renderer){
         background.dispose();
 
         renderer.renderLists.dispose();
-        console.log(scene)
+        // console.log(scene)
         return;
     } else {
         console.log("objPropType param must be 'name', 'id', or 'all'")

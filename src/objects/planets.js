@@ -14,12 +14,12 @@ import primordial1NormalMap from '../img/planets/primordial/primordial1NormalMap
 import savannah1Tex from '../img/planets/savannah/savannah1.png';
 import savannah1NormalMap from '../img/planets/savannah/savannah1NormalMap.png';
 
-const planet1Geo = new THREE.SphereGeometry(0.3, 16, 32);
-const planet1Mat = new THREE.MeshPhongMaterial({
+const volcanic1Geo = new THREE.SphereGeometry(0.3, 16, 32);
+const volcanic1Mat = new THREE.MeshPhongMaterial({
     map: new THREE.TextureLoader().load(volcanicTex),
     normalMap: new THREE.TextureLoader().load(volcanicNormalMap)
 });
-const volcanic1 = new THREE.Mesh(planet1Geo, planet1Mat);
+const volcanic1 = new THREE.Mesh(volcanic1Geo, volcanic1Mat);
 volcanic1.name = 'volcanic1';
 export { volcanic1 };
 
@@ -104,10 +104,10 @@ savannah1.receiveShadow = true;
 savannah1.castShadow = true;
 
 // Moons are only visible if parent is visible
-// volcanic1.visible = false;
-// dry1.visible = false;
-// gasGiant1.visible = false;
-// moon1GasGiant.visible = true;
-// moon2GasGiant.visible = true;
-// primordial1.visible = false;
-// savannah1.visible = true;
+volcanic1.visible = false;
+dry1.visible = false;
+gasGiant1.visible = false;
+moon1GasGiant.visible = true;
+moon2GasGiant.visible = true;
+primordial1.visible = false;
+savannah1.visible = true;
