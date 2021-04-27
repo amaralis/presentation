@@ -138,16 +138,18 @@ void main() {
     
 
     // Multiply at the end of the equation softens the edges
-    vec4 noiseX = bccNoisePlaneFirst(vec3(centeredUv.x * 5.0, centeredUv.y * 5.0, sin(time * timeMult))) * 0.5;
-    vec4 noiseY = bccNoisePlaneFirst(vec3(centeredUv.x * 5.0, centeredUv.y * 5.0, cos(time * timeMult))) * 0.5;
+    vec4 noiseX = bccNoisePlaneFirst(vec3(centeredUv.x * 5.0, centeredUv.y * 5.0, sin(time * timeMult))) * 0.6;
+    vec4 noiseY = bccNoisePlaneFirst(vec3(centeredUv.x * 5.0, centeredUv.y * 5.0, cos(time * timeMult))) * 0.6;
     vec4 fineNoiseX = bccNoisePlaneFirst(vec3(centeredUv.x * 30.0, centeredUv.y * 30.0, sin(time * timeMult)));
-    vec4 fineNoiseY = bccNoisePlaneFirst(vec3(centeredUv.x * 30.0, centeredUv.y * 30.0, cos(time * timeMult)));
+    vec4 fineNoiseY = bccNoisePlaneFirst(vec3(centeredUv.x * 30.0, centeredUv.y * 30.0, sin(time * timeMult)));
     
     // Ridge noise
     vec4 ridgeNoise = 1.0 - (vec4(noiseX.x + noiseX.y + noiseX.z) * vec4(noiseY.x + noiseY.y + noiseY.z) * 0.005);
+    // ridgeNoise = clamp(ridgeNoise, vec4(0.3, 0.1, 0.0, 1.0), vec4(1.0, 1.0, 1.0, 1.0));
 
     // Fine ridge noise - final multiplication makes it smoother or sharper
-    vec4 fineRidgeNoise = 1.0 - (vec4(fineNoiseX.x + fineNoiseX.y + fineNoiseX.z) * vec4(fineNoiseY.x + fineNoiseY.y + fineNoiseY.z) * 5.0);
+    vec4 fineRidgeNoise = 1.0 - (vec4(fineNoiseX.x + fineNoiseX.y + fineNoiseX.z) * vec4(fineNoiseY.x + fineNoiseY.y + fineNoiseY.z) * 0.1);
+    fineRidgeNoise = clamp(fineRidgeNoise, vec4(0.3, 0.1, 0.0, 0.0), vec4(1.0, 0.6, 0.0, 1.0));
     
     
     
@@ -158,8 +160,8 @@ void main() {
     vec4 billboard = vec4(0.0);
     
     float circle = (1.0 - sdCircle(centeredUv, 0.2)); // Manipulate gradient size by multiplying uv, so it doesn't get cut at the edges of the billboard; radius will affect gradient alpha
-    float fineCircle = (1.0 - sdCircle(centeredUv * 4.0, 0.2)); // Manipulate gradient size by multiplying uv, so it doesn't get cut at the edges of the billboard; radius will affect gradient alpha
-
+    float fineCircle = (1.0 - sdCircle(centeredUv * 5.4, 0.1)); // Manipulate gradient size by multiplying uv, so it doesn't get cut at the edges of the billboard; radius will affect gradient alpha
+    
     // Cut ridge noise off when gradient's alpha reaches 0, otherwise noise reappears at billboard's edges
     ridgeNoise *= max(circle, 0.0);
     fineRidgeNoise *= max(fineCircle, 0.0);
@@ -167,11 +169,12 @@ void main() {
     billboard += circle;
     billboard *= gradientColor;
     billboard *= ridgeNoise;
-    billboard += fineRidgeNoise * 0.0005;
+    // billboard += fineRidgeNoise * 0.0005;
+    billboard += fineRidgeNoise;
 
 
 
-    // gl_FragColor = ridgeNoise;
+    // gl_FragColor = fineRidgeNoise;
     gl_FragColor = billboard;
     // gl_FragColor = vec4(1.0);
 }

@@ -61,7 +61,7 @@ function startSolarSystem(){
     composer.setSize(width, height);
     
     const renderPass = new RenderPass(scene, camera);
-    const unrealBloomPass = new UnrealBloomPass({x: width, y: height}, 4.0, 0.8, 0.4);
+    const unrealBloomPass = new UnrealBloomPass({x: width, y: height}, 3.0, 0.8, 0.4);
     const focusShader = new ShaderPass(FocusShader);
     focusShader.uniforms['sampleDistance'].value = 0.0;
     focusShader.uniforms['screenWidth'].value = width;

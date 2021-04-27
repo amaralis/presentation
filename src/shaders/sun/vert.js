@@ -147,9 +147,12 @@ void main() {
     v_Uv = uv;
     v_Scale = 6.0;
     
-    v_timeMultCoarse = 0.05;
-    v_timeMultMedium = 0.15;
-    v_timeMultFine = 0.25;
+    v_timeMultCoarse = 0.025;
+    v_timeMultMedium = 0.075;
+    v_timeMultFine = 0.125;
+    // v_timeMultCoarse = 0.05;
+    // v_timeMultMedium = 0.15;
+    // v_timeMultFine = 0.25;
     
     float timeMultCoarse = v_timeMultCoarse;
     float timeMultMedium = v_timeMultMedium;
